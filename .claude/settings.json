@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "PowerShell(node --version)",
-      "PowerShell(npm --version)"
+      "PowerShell(npm --version)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3001\" -UseBasicParsing)"
+    ],
+    "additionalDirectories": [
+      "d:\\websitem\\toyfactory\\src\\lib\\data",
+      "d:\\websitem\\toyfactory\\src\\lib",
+      "d:\\websitem\\toyfactory\\src\\app",
+      "d:\\websitem\\toyfactory\\src\\components",
+      "d:\\websitem\\toyfactory"
     ]
   }
 }

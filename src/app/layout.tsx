@@ -4,7 +4,8 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Toaster } from 'react-hot-toast';
-import RecentOrdersTicker from '@/components/RecentOrdersTicker';
+import RecentPurchaseAlert from '@/components/RecentPurchaseAlert';
+import OfferBanner from '@/components/OfferBanner';
 
 const nunito = Nunito({ subsets: ['latin'], variable: '--font-nunito', display: 'swap' });
 const baloo = Baloo_2({ subsets: ['latin'], variable: '--font-baloo', display: 'swap', weight: ['400', '600', '700', '800'] });
@@ -57,8 +58,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="font-nunito bg-white min-h-screen">
         <Toaster position="top-center" toastOptions={{ duration: 2500 }} />
-        <RecentOrdersTicker />
+        <OfferBanner />
         <Navbar />
+        <RecentPurchaseAlert />
         <main className="min-h-screen">{children}</main>
         <Footer />
       </body>

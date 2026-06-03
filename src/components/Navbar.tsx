@@ -1,120 +1,178 @@
 'use client';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { ShoppingCart, Heart, Search, Menu, X, Package } from 'lucide-react';
+import { ShoppingCart, Heart, Search, Menu, X } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { useRouter } from 'next/navigation';
+
+const NAV_ITEMS = [
+  ['/', 'Home'],
+  ['/products', 'All Toys'],
+  ['/products?category=sex', '🔞 Adults'],
+  ['/products?category=stem', 'STEM'],
+  ['/about', 'About'],
+  ['/contact', 'Contact'],
+];
+
+const CATS = [
+  ['🚗 Hot Wheels', '/products?subcategory=Hot+Wheels'],
+  ['🐻 Plush', '/products?category=plush'],
+  ['👗 Dolls', '/products?category=dolls'],
+  ['🤖 STEM', '/products?category=stem'],
+  ['🚙 Ride-On Cars', '/products?subcategory=Toy+cars+(Big)'],
+  ['🛴 Scooters', '/products?subcategory=Toy+scooters'],
+  ['👨‍🍳 Kitchen', '/products?category=kitchen'],
+  ['🏠 Dollhouses', '/products?category=houses'],
+  ['🎮 Games', '/products?category=collectibles'],
+  ['💆 Wellness', '/products?category=wellness'],
+  ['🔞 Adults', '/products?category=sex'],
+];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
-  const [scrolled, setScrolled] = useState(false);
-  const cartCount = useStore((s) => s.cartCount());
-  const favorites = useStore((s) => s.favorites);
+  const [shadow, setShadow] = useState(false);
+  const cartCount = useStore(s => s.cartCount());
+  const favorites = useStore(s => s.favorites);
   const router = useRouter();
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handler);
-    return () => window.removeEventListener('scroll', handler);
+    const fn = () => setShadow(window.scrollY > 10);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const search = (e: React.FormEvent) => {
     e.preventDefault();
-    if (q.trim()) router.push(`/products?search=${encodeURIComponent(q.trim())}`);
+    if (q.trim()) { router.push(`/products?search=${encodeURIComponent(q.trim())}`); setOpen(false); }
   };
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg' : 'bg-white/95 backdrop-blur-md'}`}>
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16 gap-4">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <span className="text-3xl">🧸</span>
-            <div>
-              <div className="font-baloo font-800 text-xl leading-tight gradient-text">ToyFactory</div>
-              <div className="text-xs text-gray-500 -mt-1">India's #1 Toy Store</div>
-            </div>
-          </Link>
+    <nav style={{
+      position:'sticky',top:0,zIndex:40,
+      background:'rgba(255,255,255,0.97)',
+      backdropFilter:'blur(16px)',
+      boxShadow: shadow ? '0 4px 30px rgba(0,0,0,0.08)' : 'none',
+      transition:'box-shadow 0.3s',
+    }}>
+      {/* Main bar */}
+      <div style={{maxWidth:1280,margin:'0 auto',padding:'0 20px',display:'flex',alignItems:'center',height:64,gap:16}}>
 
-          {/* Search */}
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-xl">
-            <div className="relative w-full">
-              <input
-                value={q}
-                onChange={e => setQ(e.target.value)}
-                type="text"
-                placeholder="Search toys, brands, categories..."
-                className="w-full border-2 border-orange-200 rounded-full pl-5 pr-12 py-2 text-sm focus:outline-none focus:border-orange-400 transition-colors"
-              />
-              <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-500 text-white p-1.5 rounded-full hover:bg-orange-600 transition-colors">
-                <Search size={14} />
-              </button>
-            </div>
-          </form>
-
-          {/* Nav Links */}
-          <div className="hidden md:flex items-center gap-1 text-sm">
-            <Link href="/products" className="px-3 py-2 rounded-lg hover:bg-orange-50 text-gray-700 hover:text-orange-600 font-semibold transition-colors">All Toys</Link>
-            <Link href="/products?category=wellness" className="px-3 py-2 rounded-lg hover:bg-pink-50 text-gray-700 hover:text-pink-600 font-semibold transition-colors">Wellness 18+</Link>
-            <Link href="/products?category=stem" className="px-3 py-2 rounded-lg hover:bg-green-50 text-gray-700 hover:text-green-600 font-semibold transition-colors">STEM</Link>
+        {/* Logo */}
+        <Link href="/" style={{display:'flex',alignItems:'center',gap:10,flexShrink:0,textDecoration:'none'}}>
+          <span style={{fontSize:28}}>🧸</span>
+          <div>
+            <div className="font-baloo gradient-text" style={{fontSize:20,fontWeight:800,lineHeight:1.1}}>ToyFactory</div>
+            <div style={{fontSize:9,color:'#999',fontWeight:700,letterSpacing:'0.08em',marginTop:1}}>INDIA&apos;S #1 TOY STORE</div>
           </div>
+        </Link>
 
-          {/* Actions */}
-          <div className="flex items-center gap-2">
-            <Link href="/favorites" className="relative p-2 rounded-full hover:bg-pink-50 transition-colors">
-              <Heart size={22} className={favorites.length > 0 ? 'text-pink-500 fill-pink-500' : 'text-gray-600'} />
-              {favorites.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">{favorites.length}</span>
-              )}
-            </Link>
-            <Link href="/cart" className="relative p-2 rounded-full hover:bg-orange-50 transition-colors">
-              <ShoppingCart size={22} className="text-gray-600" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold animate-pulse">{cartCount}</span>
-              )}
-            </Link>
-            <Link href="/orders" className="hidden md:flex p-2 rounded-full hover:bg-gray-50 transition-colors">
-              <Package size={22} className="text-gray-600" />
-            </Link>
-            <button onClick={() => setOpen(!open)} className="md:hidden p-2">
-              {open ? <X size={22} /> : <Menu size={22} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile search */}
-        <form onSubmit={handleSearch} className="md:hidden pb-3">
-          <div className="relative">
-            <input value={q} onChange={e => setQ(e.target.value)} type="text" placeholder="Search toys..." className="w-full border-2 border-orange-200 rounded-full pl-4 pr-10 py-2 text-sm focus:outline-none focus:border-orange-400" />
-            <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-500 text-white p-1.5 rounded-full">
-              <Search size={14} />
+        {/* Search */}
+        <form onSubmit={search} style={{flex:1,maxWidth:500,display:'flex',gap:0}} className="hidden md:flex">
+          <div style={{position:'relative',width:'100%'}}>
+            <input
+              value={q} onChange={e=>setQ(e.target.value)}
+              placeholder="Search toys, brands, categories..."
+              style={{
+                width:'100%',background:'#f5f5f5',border:'none',
+                borderRadius:14,padding:'10px 44px 10px 18px',
+                fontSize:13,color:'#111',outline:'none',fontFamily:'inherit',
+                transition:'box-shadow 0.2s',
+              }}
+              onFocus={e=>(e.target.style.boxShadow='0 0 0 3px rgba(255,107,0,0.18)')}
+              onBlur={e=>(e.target.style.boxShadow='none')}
+            />
+            <button type="submit" style={{
+              position:'absolute',right:6,top:'50%',transform:'translateY(-50%)',
+              background:'linear-gradient(120deg,#FF6B00,#FF3D77)',
+              border:'none',borderRadius:10,width:32,height:32,
+              display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',
+            }}>
+              <Search size={14} color="#fff" />
             </button>
           </div>
         </form>
 
-        {/* Mobile menu */}
-        {open && (
-          <div className="md:hidden border-t border-gray-100 py-3 space-y-1">
-            {[['/', '🏠 Home'], ['/products', '🧸 All Toys'], ['/products?category=wellness', '💆 Wellness 18+'], ['/products?category=stem', '🤖 STEM Toys'], ['/cart', '🛒 Cart'], ['/favorites', '❤️ Favourites'], ['/orders', '📦 My Orders'], ['/about', '🏢 About Us'], ['/contact', '📞 Contact']].map(([href, label]) => (
-              <Link key={href} href={href} onClick={() => setOpen(false)} className="block px-4 py-2.5 rounded-lg hover:bg-orange-50 text-gray-700 font-semibold">
-                {label}
-              </Link>
-            ))}
-          </div>
-        )}
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center gap-1">
+          {NAV_ITEMS.slice(1,4).map(([href,label]) => (
+            <Link key={href} href={href} className="nav-link">{label}</Link>
+          ))}
+        </div>
+
+        {/* Icons */}
+        <div style={{display:'flex',alignItems:'center',gap:4,marginLeft:'auto'}}>
+          <Link href="/favorites" style={{position:'relative',width:40,height:40,display:'flex',alignItems:'center',justifyContent:'center',borderRadius:12,background:favorites.length?'#fff0f5':'transparent',textDecoration:'none',transition:'background 0.15s'}}>
+            <Heart size={20} style={{color:favorites.length?'#FF3D77':'#666',fill:favorites.length?'#FF3D77':'none'}} />
+            {favorites.length>0 && (
+              <span style={{position:'absolute',top:4,right:4,width:16,height:16,borderRadius:'50%',background:'#FF3D77',color:'#fff',fontSize:9,fontWeight:900,display:'flex',alignItems:'center',justifyContent:'center'}}>{favorites.length}</span>
+            )}
+          </Link>
+          <Link href="/cart" style={{position:'relative',width:40,height:40,display:'flex',alignItems:'center',justifyContent:'center',borderRadius:12,textDecoration:'none',background:cartCount?'#fff3ea':'transparent',transition:'background 0.15s'}}>
+            <ShoppingCart size={20} style={{color:cartCount?'#FF6B00':'#666'}} />
+            {cartCount>0 && (
+              <span style={{position:'absolute',top:4,right:4,minWidth:18,height:18,borderRadius:9,background:'linear-gradient(120deg,#FF6B00,#FF3D77)',color:'#fff',fontSize:9,fontWeight:900,display:'flex',alignItems:'center',justifyContent:'center',padding:'0 4px'}}>{cartCount}</span>
+            )}
+          </Link>
+          <button onClick={()=>setOpen(!open)} style={{width:40,height:40,display:'flex',alignItems:'center',justifyContent:'center',borderRadius:12,background:'transparent',border:'none',cursor:'pointer'}} className="md:hidden">
+            {open ? <X size={22} color="#111" /> : <Menu size={22} color="#111" />}
+          </button>
+        </div>
       </div>
 
-      {/* Category bar */}
-      <div className="hidden md:block border-t border-gray-100 bg-gradient-to-r from-orange-50 to-pink-50">
-        <div className="max-w-7xl mx-auto px-4 flex gap-6 text-sm py-2 overflow-x-auto">
-          {[['Hot Wheels', '/products?subcategory=Hot+Wheels', '🚗'], ['Plush Toys', '/products?category=plush', '🧸'], ['Dolls', '/products?category=dolls', '👗'], ['Teddies', '/products?subcategory=Teddys', '🐻'], ['STEM', '/products?category=stem', '🤖'], ['Ride-On', '/products?subcategory=Toy+cars+(Big)', '🚙'], ['Scooters', '/products?subcategory=Toy+scooters', '🛴'], ['Kitchen', '/products?category=kitchen', '👨‍🍳'], ['Dollhouses', '/products?category=houses', '🏠'], ['Collectibles', '/products?category=collectibles', '🎮'], ['Wellness 🔞', '/products?category=wellness', '💆']].map(([label, href, icon]) => (
-            <Link key={href} href={href} className="whitespace-nowrap flex items-center gap-1 px-3 py-1 rounded-full hover:bg-white hover:shadow-sm text-gray-700 hover:text-orange-600 font-semibold transition-all">
-              <span>{icon}</span> {label}
+      {/* Category strip */}
+      <div className="hidden md:block" style={{borderTop:'1px solid #f0f0f0',overflowX:'auto'}}>
+        <div style={{maxWidth:1280,margin:'0 auto',padding:'0 20px',display:'flex',gap:4,height:40,alignItems:'center'}}>
+          {CATS.map(([label,href]) => (
+            <Link key={href} href={href} style={{
+              whiteSpace:'nowrap',fontSize:12,fontWeight:700,color:'#444',
+              padding:'5px 14px',borderRadius:20,textDecoration:'none',
+              transition:'all 0.15s',flexShrink:0,
+            }}
+            onMouseEnter={e=>{(e.target as HTMLElement).style.background='#fff3ea';(e.target as HTMLElement).style.color='#FF6B00';}}
+            onMouseLeave={e=>{(e.target as HTMLElement).style.background='transparent';(e.target as HTMLElement).style.color='#444';}}
+            >
+              {label}
             </Link>
           ))}
         </div>
       </div>
+
+      {/* Mobile search */}
+      <form onSubmit={search} className="md:hidden" style={{padding:'0 16px 12px'}}>
+        <div style={{position:'relative'}}>
+          <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search toys..."
+            style={{width:'100%',background:'#f5f5f5',border:'none',borderRadius:14,padding:'10px 44px 10px 18px',fontSize:13,outline:'none',fontFamily:'inherit'}} />
+          <button type="submit" style={{position:'absolute',right:6,top:'50%',transform:'translateY(-50%)',background:'linear-gradient(120deg,#FF6B00,#FF3D77)',border:'none',borderRadius:10,width:32,height:32,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>
+            <Search size={14} color="#fff" />
+          </button>
+        </div>
+      </form>
+
+      {/* Mobile menu */}
+      {open && (
+        <div style={{background:'#fff',padding:'12px 16px 20px',boxShadow:'0 20px 40px rgba(0,0,0,0.1)'}}>
+          {NAV_ITEMS.map(([href,label]) => (
+            <Link key={href} href={href} onClick={()=>setOpen(false)} style={{
+              display:'block',padding:'12px 16px',borderRadius:14,
+              fontSize:15,fontWeight:700,color:'#222',textDecoration:'none',marginBottom:4,
+              transition:'background 0.15s',
+            }}
+            onMouseEnter={e=>(e.currentTarget.style.background='#fff3ea')}
+            onMouseLeave={e=>(e.currentTarget.style.background='transparent')}
+            >
+              {label}
+            </Link>
+          ))}
+          <div style={{borderTop:'1px solid #f0f0f0',marginTop:8,paddingTop:12}}>
+            {[['🛒 Cart','/cart'],['❤️ Favourites','/favorites'],['📦 Orders','/orders']].map(([l,h])=>(
+              <Link key={h} href={h} onClick={()=>setOpen(false)} style={{display:'block',padding:'10px 16px',borderRadius:14,fontSize:14,fontWeight:700,color:'#444',textDecoration:'none',marginBottom:2}}>
+                {l}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

@@ -1,808 +1,213 @@
 export type Gender = 'boys' | 'girls' | 'men' | 'women' | 'adults' | 'unisex' | 'gay' | 'trans';
-export type Category = 'toys' | 'wellness' | 'stem' | 'outdoor' | 'collectibles' | 'plush' | 'vehicles' | 'kitchen' | 'houses' | 'dolls';
+export type Category = 'toys' | 'wellness' | 'stem' | 'outdoor' | 'collectibles' | 'plush' | 'vehicles' | 'kitchen' | 'houses' | 'dolls' | 'sex';
 
 export interface Review {
-  id: string;
-  name: string;
-  city: string;
-  state: string;
-  rating: number;
-  comment: string;
-  date: string;
-  verified: boolean;
-  avatar: string;
+  id: string; name: string; city: string; state: string;
+  rating: number; comment: string; date: string; verified: boolean; avatar: string;
 }
 
 export interface Product {
-  id: string;
-  name: string;
-  brand: string;
-  category: Category;
-  subcategory: string;
-  gender: Gender[];
-  ageGroup: string;
-  price: number;
-  mrp: number;
-  discount: number;
-  images: string[];
-  description: string;
-  features: string[];
-  manufacturer: string;
-  manufacturerAddress: string;
-  countryOfOrigin: string;
-  material: string;
-  ageRating: string;
-  weight: string;
-  dimensions: string;
-  inStock: boolean;
-  stockCount: number;
-  rating: number;
-  reviewCount: number;
-  reviews: Review[];
-  badge?: string;
-  isFeatured?: boolean;
-  isBestseller?: boolean;
-  isNew?: boolean;
-  tags: string[];
+  id: string; name: string; brand: string; category: Category; subcategory: string;
+  gender: Gender[]; ageGroup: string; price: number; mrp: number; discount: number;
+  images: string[]; description: string; features: string[];
+  manufacturer: string; manufacturerAddress: string; countryOfOrigin: string;
+  material: string; ageRating: string; weight: string; dimensions: string;
+  inStock: boolean; stockCount: number; rating: number; reviewCount: number;
+  reviews: Review[]; badge?: string; isFeatured?: boolean; isBestseller?: boolean;
+  isNew?: boolean; tags: string[];
 }
+
+// ─── Unsplash images by topic (reliable, no auth needed) ───────────────────
+const IMG = {
+  hotwheels:    ['https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80','https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=600&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80','https://images.unsplash.com/photo-1518829025-5e12980abcca?w=600&q=80','https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=600&q=80'],
+  rideon:       ['https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&q=80','https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80','https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=600&q=80','https://images.unsplash.com/photo-1518829025-5e12980abcca?w=600&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80'],
+  plush:        ['https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80','https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=600&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80','https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80','https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=600&q=80'],
+  doll:         ['https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80','https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80','https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=600&q=80','https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80'],
+  stem:         ['https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80','https://images.unsplash.com/photo-1518829025-5e12980abcca?w=600&q=80','https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=600&q=80','https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80'],
+  outdoor:      ['https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80','https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&q=80','https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=600&q=80','https://images.unsplash.com/photo-1518829025-5e12980abcca?w=600&q=80','https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80'],
+  kitchen:      ['https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80','https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=600&q=80','https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80','https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80'],
+  house:        ['https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=600&q=80','https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80','https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80','https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80'],
+  collectible:  ['https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&q=80','https://images.unsplash.com/photo-1518829025-5e12980abcca?w=600&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80','https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=600&q=80','https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80'],
+  wellness:     ['https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80','https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80','https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=600&q=80','https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=600&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80'],
+  skincare:     ['https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80','https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80','https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=600&q=80','https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80','https://images.unsplash.com/photo-1585184394271-4c0a47dc59c9?w=600&q=80'],
+  supplement:   ['https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80','https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80','https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80','https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80','https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80'],
+  sex:          ['https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80','https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80','https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80','https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80','https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80'],
+};
 
 const CITIES = [
-  { city: 'Delhi', state: 'Delhi' },
-  { city: 'Mumbai', state: 'Maharashtra' },
-  { city: 'Bengaluru', state: 'Karnataka' },
-  { city: 'Hyderabad', state: 'Telangana' },
-  { city: 'Chennai', state: 'Tamil Nadu' },
-  { city: 'Kolkata', state: 'West Bengal' },
-  { city: 'Pune', state: 'Maharashtra' },
-  { city: 'Ahmedabad', state: 'Gujarat' },
-  { city: 'Jaipur', state: 'Rajasthan' },
-  { city: 'Lucknow', state: 'Uttar Pradesh' },
-  { city: 'Noida', state: 'Uttar Pradesh' },
-  { city: 'Gurugram', state: 'Haryana' },
-  { city: 'Chandigarh', state: 'Punjab' },
-  { city: 'Bhopal', state: 'Madhya Pradesh' },
-  { city: 'Indore', state: 'Madhya Pradesh' },
-  { city: 'Nagpur', state: 'Maharashtra' },
-  { city: 'Surat', state: 'Gujarat' },
-  { city: 'Vadodara', state: 'Gujarat' },
-  { city: 'Patna', state: 'Bihar' },
-  { city: 'Coimbatore', state: 'Tamil Nadu' },
+  {city:'Delhi',state:'Delhi'},{city:'Mumbai',state:'Maharashtra'},{city:'Bengaluru',state:'Karnataka'},
+  {city:'Hyderabad',state:'Telangana'},{city:'Chennai',state:'Tamil Nadu'},{city:'Kolkata',state:'West Bengal'},
+  {city:'Pune',state:'Maharashtra'},{city:'Ahmedabad',state:'Gujarat'},{city:'Jaipur',state:'Rajasthan'},
+  {city:'Lucknow',state:'Uttar Pradesh'},{city:'Noida',state:'Uttar Pradesh'},{city:'Gurugram',state:'Haryana'},
+  {city:'Chandigarh',state:'Punjab'},{city:'Bhopal',state:'Madhya Pradesh'},{city:'Indore',state:'Madhya Pradesh'},
+  {city:'Nagpur',state:'Maharashtra'},{city:'Surat',state:'Gujarat'},{city:'Vadodara',state:'Gujarat'},
+  {city:'Patna',state:'Bihar'},{city:'Coimbatore',state:'Tamil Nadu'},
 ];
 
-const NAMES = [
-  'Priya Sharma', 'Rahul Gupta', 'Ananya Singh', 'Vikram Patel', 'Meera Nair',
-  'Arjun Kumar', 'Kavya Reddy', 'Rohan Mehta', 'Sneha Joshi', 'Aditya Verma',
-  'Pooja Agarwal', 'Kiran Rao', 'Deepak Malhotra', 'Anjali Krishnan', 'Suresh Iyer',
-  'Neha Kapoor', 'Amit Bose', 'Ritu Sinha', 'Manish Tiwari', 'Divya Pandey',
-];
+const NAMES = ['Priya Sharma','Rahul Gupta','Ananya Singh','Vikram Patel','Meera Nair','Arjun Kumar','Kavya Reddy','Rohan Mehta','Sneha Joshi','Aditya Verma','Pooja Agarwal','Kiran Rao','Deepak Malhotra','Anjali Krishnan','Suresh Iyer','Neha Kapoor','Amit Bose','Ritu Sinha','Manish Tiwari','Divya Pandey'];
 
 const COMMENTS = [
-  'Absolutely love this product! My kids are so happy with it. Great quality and fast delivery.',
-  'Excellent build quality. Worth every rupee. My son plays with it all day!',
-  'Amazing product, bought it as a gift and everyone loved it. Highly recommended!',
-  'Super fast delivery, well packaged, and the product quality is outstanding.',
-  'My daughter adores this! She plays with it every single day. 5 stars!',
+  'Absolutely love this product! Quality is outstanding and delivery was super fast.',
+  'Excellent! Worth every rupee. My kids are so happy!',
+  'Amazing product, bought it as a gift. Everyone loved it!',
+  'Super fast delivery, well packaged, product quality is top notch.',
+  'My daughter adores this! She plays with it every day. 5 stars!',
   'Great value for money. The discount was unbelievable. Will buy again.',
-  'Ordered from Bangalore, received in 2 days. Product exceeded expectations!',
-  'Exactly as described. Colors are vibrant and the material is very safe.',
+  'Ordered from Bangalore, received in 2 days. Exceeded expectations!',
+  'Exactly as described. Safe and premium quality. Very happy!',
   'My kids went crazy when they saw this. Best purchase this year!',
-  'Premium quality product at an amazing price. Toyfactory never disappoints!',
+  'Premium quality at an amazing price. ToyFactory never disappoints!',
 ];
 
-function generateReviews(count: number, baseRating: number): Review[] {
-  const reviews: Review[] = [];
-  for (let i = 0; i < count; i++) {
-    const cityData = CITIES[i % CITIES.length];
-    const name = NAMES[i % NAMES.length];
-    const rating = Math.min(5, Math.max(3, baseRating + (Math.random() > 0.7 ? -1 : 0)));
-    reviews.push({
-      id: `rev-${i}`,
-      name,
-      city: cityData.city,
-      state: cityData.state,
-      rating,
+function genReviews(count: number, baseRating: number): Review[] {
+  return Array.from({length: count}, (_,i) => {
+    const c = CITIES[i % CITIES.length];
+    const n = NAMES[i % NAMES.length];
+    return {
+      id:`rev-${i}`, name:n, city:c.city, state:c.state,
+      rating: Math.min(5, Math.max(3, Math.floor(baseRating) + (i % 5 === 0 ? -1 : 0))),
       comment: COMMENTS[i % COMMENTS.length],
-      date: new Date(Date.now() - i * 86400000 * 3).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+      date: new Date(Date.now() - i * 259200000).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),
       verified: true,
-      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name.replace(' ', '')}`,
-    });
-  }
-  return reviews;
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${n.replace(' ','')}`,
+    };
+  });
 }
 
+const MFR_NOIDA = { m:'ToyFactory India Pvt. Ltd.', a:'42, Sector 18, Atta Market, Noida, Uttar Pradesh 201301' };
+const MFR_PUNE  = { m:'KidzRide India Pvt. Ltd.',  a:'Plot 78, MIDC, Chakan, Pune, Maharashtra 410501' };
+const MFR_MUM   = { m:'KaidoBox Asia Pvt. Ltd.',   a:'Unit 5, Creative Hub, Andheri East, Mumbai 400069' };
+const MFR_BANG  = { m:'TechKidz Education Pvt. Ltd.', a:'Tower B, Tech Park, Whitefield, Bengaluru 560066' };
+const MFR_BLOOM = { m:'BloomWell Health Pvt. Ltd.', a:'B-12, Corporate Park, Sector 142, Noida 201304' };
+const MFR_SEOUL = { m:'Seoul Glow Cosmetics India', a:'Unit 8, Cosmetic Park, Manesar, Gurugram 122051' };
+
 export const PRODUCTS: Product[] = [
-  // HOT WHEELS
-  {
-    id: 'hw-001',
-    name: 'Hot Wheels 50-Car Pack — Collector Edition',
-    brand: 'Hot Wheels',
-    category: 'vehicles',
-    subcategory: 'Hot Wheels',
-    gender: ['boys', 'unisex'],
-    ageGroup: '3-12 years',
-    price: 1499,
-    mrp: 7999,
-    discount: 81,
-    images: [
-      'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&q=80',
-      'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1518829025-5e12980abcca?w=800&q=80',
-      'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=80',
-    ],
-    description: 'The ultimate Hot Wheels 50-car collector edition pack! Features 50 uniquely designed die-cast metal cars in vibrant colors. Perfect for racing, collecting, and gifting. Each car has detailed designs inspired by real sports cars, muscle cars, and fantasy vehicles.',
-    features: [
-      '50 die-cast metal cars in one pack',
-      'Iconic Hot Wheels designs and colors',
-      '1:64 scale precision engineering',
-      'Compatible with all Hot Wheels tracks',
-      'Collectible packaging with display window',
-      'BIS certified, child-safe materials',
-    ],
-    manufacturer: 'Mattel India Pvt. Ltd.',
-    manufacturerAddress: '4th Floor, Towa Corporate Centre, Sector 48, Gurugram, Haryana 122018',
-    countryOfOrigin: 'China',
-    material: 'Die-cast zinc alloy with plastic parts',
-    ageRating: '3+',
-    weight: '1.2 kg',
-    dimensions: '35 × 28 × 8 cm',
-    inStock: true,
-    stockCount: 243,
-    rating: 4.7,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: '81% OFF',
-    isFeatured: true,
-    isBestseller: true,
-    tags: ['hot wheels', 'die cast cars', 'toy cars', 'boys toys', 'collector'],
-  },
-  // PLUSH TOYS
-  {
-    id: 'pl-001',
-    name: 'Giant Fluffy Unicorn Plush — 90cm Jumbo',
-    brand: 'ToyFactory Originals',
-    category: 'plush',
-    subcategory: 'Plush Toys',
-    gender: ['girls', 'unisex'],
-    ageGroup: '2+ years',
-    price: 899,
-    mrp: 4999,
-    discount: 82,
-    images: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
-      'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80',
-      'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=800&q=80',
-      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80',
-    ],
-    description: 'Meet your new best friend! This adorable 90cm Giant Fluffy Unicorn is made from ultra-soft premium plush. With rainbow mane, glittery horn, and the softest body imaginable, this unicorn is perfect for hugging, playing, and decorating rooms. Machine washable!',
-    features: [
-      'Ultra-soft premium plush material',
-      'Jumbo 90cm size — perfect for hugging',
-      'Rainbow mane and glitter horn',
-      'Machine washable',
-      'Non-toxic, hypoallergenic stuffing',
-      'Perfect gift for birthdays and festivals',
-    ],
-    manufacturer: 'Soft Toys India Ltd.',
-    manufacturerAddress: 'Plot 45, Industrial Area Phase 2, Noida, Uttar Pradesh 201301',
-    countryOfOrigin: 'India',
-    material: 'Premium polyester plush, PP cotton filling',
-    ageRating: '2+',
-    weight: '800g',
-    dimensions: '90 × 30 × 25 cm',
-    inStock: true,
-    stockCount: 156,
-    rating: 4.8,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: 'BESTSELLER',
-    isFeatured: true,
-    isBestseller: true,
-    tags: ['unicorn', 'plush', 'stuffed toy', 'girls toy', 'soft toy'],
-  },
-  // DOLLS
-  {
-    id: 'dl-001',
-    name: 'Fashion Doll Deluxe Set with 30 Accessories',
-    brand: 'GlamDoll',
-    category: 'dolls',
-    subcategory: 'Dolls',
-    gender: ['girls'],
-    ageGroup: '3-12 years',
-    price: 699,
-    mrp: 3999,
-    discount: 83,
-    images: [
-      'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=800&q=80',
-      'https://images.unsplash.com/photo-1563205531-d7a5b8a1c7e2?w=800&q=80',
-      'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
-    ],
-    description: 'The ultimate fashion doll experience! This deluxe set includes a stunning 30cm fashion doll with articulated joints, 5 complete outfits, shoes, handbags, jewelry, and a styling brush. Encourages creativity, storytelling, and fashion sense in young girls.',
-    features: [
-      '30cm fully articulated fashion doll',
-      '5 complete designer outfits',
-      '30+ accessories: shoes, bags, jewelry',
-      'Real hair that can be styled',
-      'Non-toxic, BPA-free materials',
-      'Detailed Indian and Western outfits',
-    ],
-    manufacturer: 'Funskool India Ltd.',
-    manufacturerAddress: '7th Cross, SIPCOT Industrial Complex, Hosur, Tamil Nadu 635109',
-    countryOfOrigin: 'India',
-    material: 'ABS plastic, nylon hair, polyester fabric',
-    ageRating: '3+',
-    weight: '400g',
-    dimensions: '30 × 20 × 8 cm',
-    inStock: true,
-    stockCount: 89,
-    rating: 4.6,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: '83% OFF',
-    isFeatured: true,
-    tags: ['doll', 'fashion doll', 'girls toy', 'accessories'],
-  },
-  // TEDDY
-  {
-    id: 'td-001',
-    name: 'Classic Brown Teddy Bear — 60cm Premium',
-    brand: 'HugMe',
-    category: 'plush',
-    subcategory: 'Teddys',
-    gender: ['girls', 'boys', 'unisex'],
-    ageGroup: 'All ages',
-    price: 549,
-    mrp: 2999,
-    discount: 82,
-    images: [
-      'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80',
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
-      'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=800&q=80',
-      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-    ],
-    description: 'The timeless Classic Brown Teddy Bear — soft, cuddly, and full of love! At 60cm, this premium teddy bear is the perfect companion for children and adults alike. Made from the softest plush fabric with embroidered eyes for safety. A gift everyone loves!',
-    features: [
-      '60cm premium plush teddy bear',
-      'Ultra-soft high-pile plush fabric',
-      'Safety embroidered eyes (no choking hazard)',
-      'Machine washable',
-      'Hypoallergenic stuffing',
-      'Perfect for Valentine\'s, birthdays, and festivals',
-    ],
-    manufacturer: 'HugMe Toys Pvt. Ltd.',
-    manufacturerAddress: 'Unit 12, Toy Cluster, Sector 63, Noida, Uttar Pradesh 201307',
-    countryOfOrigin: 'India',
-    material: 'Polyester plush, PP cotton',
-    ageRating: '0+',
-    weight: '550g',
-    dimensions: '60 × 30 × 20 cm',
-    inStock: true,
-    stockCount: 312,
-    rating: 4.9,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: '🐻 MOST LOVED',
-    isFeatured: true,
-    isBestseller: true,
-    tags: ['teddy', 'teddy bear', 'soft toy', 'plush', 'gift'],
-  },
-  // BIG TOY CAR
-  {
-    id: 'tc-001',
-    name: 'Ride-On Electric SUV Car for Kids — Remote Control',
-    brand: 'KidzRide',
-    category: 'vehicles',
-    subcategory: 'Toy cars (Big)',
-    gender: ['boys', 'girls', 'unisex'],
-    ageGroup: '2-7 years',
-    price: 8999,
-    mrp: 34999,
-    discount: 74,
-    images: [
-      'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&q=80',
-      'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=800&q=80',
-      'https://images.unsplash.com/photo-1518829025-5e12980abcca?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=80',
-    ],
-    description: 'Let your little one experience the joy of driving! This electric ride-on SUV features a 12V rechargeable battery, parental remote control, working headlights, horn, and MP3 music system. Safe, sturdy construction supports up to 30kg. The ultimate kids\' gift!',
-    features: [
-      '12V rechargeable battery — 2-3 hours playtime',
-      'Parental remote control for safety',
-      'Working LED headlights and horn',
-      'Built-in MP3 player and speakers',
-      'Seatbelt for safety',
-      'Max speed: 3-5 km/h, supports 30kg',
-    ],
-    manufacturer: 'KidzRide India Pvt. Ltd.',
-    manufacturerAddress: 'Plot 78, MIDC Industrial Area, Chakan, Pune, Maharashtra 410501',
-    countryOfOrigin: 'China',
-    material: 'PP plastic, steel frame, rubber tyres',
-    ageRating: '2-7 years',
-    weight: '12 kg',
-    dimensions: '105 × 65 × 55 cm',
-    inStock: true,
-    stockCount: 45,
-    rating: 4.7,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: '74% OFF',
-    isFeatured: true,
-    tags: ['ride on car', 'electric car', 'toy car', 'remote control', 'kids car'],
-  },
-  // TOY SCOOTER
-  {
-    id: 'sc-001',
-    name: 'Kids 3-Wheel LED Scooter — Adjustable Height',
-    brand: 'ZoomKids',
-    category: 'outdoor',
-    subcategory: 'Toy scooters',
-    gender: ['boys', 'girls', 'unisex'],
-    ageGroup: '3-10 years',
-    price: 1299,
-    mrp: 5999,
-    discount: 78,
-    images: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=80',
-      'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=800&q=80',
-      'https://images.unsplash.com/photo-1518829025-5e12980abcca?w=800&q=80',
-      'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&q=80',
-    ],
-    description: 'The safest and most fun scooter for your little rider! 3-wheel design ensures perfect balance. LED light-up wheels create magical effects at night. Adjustable handlebar grows with your child. Rear foot brake for safe stopping. Foldable for easy storage.',
-    features: [
-      '3-wheel stable design — no falling!',
-      'LED light-up wheels (battery-free, pressure activated)',
-      'Adjustable T-bar handle: 65-95 cm',
-      'Rear foot brake',
-      'Weight capacity: 50 kg',
-      'Foldable — easy to carry and store',
-    ],
-    manufacturer: 'ZoomKids Sports Pvt. Ltd.',
-    manufacturerAddress: 'B-45, Okhla Industrial Area Phase 1, New Delhi 110020',
-    countryOfOrigin: 'China',
-    material: 'Aircraft-grade aluminium, ABEC-7 bearings, PU wheels',
-    ageRating: '3+',
-    weight: '3.2 kg',
-    dimensions: '60 × 40 × 95 cm',
-    inStock: true,
-    stockCount: 167,
-    rating: 4.6,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: '78% OFF',
-    isFeatured: true,
-    tags: ['scooter', 'kids scooter', 'LED scooter', 'outdoor toy', '3 wheel scooter'],
-  },
-  // TOY KITCHEN
-  {
-    id: 'kt-001',
-    name: 'Dream Kitchen Playset — 85-Piece Deluxe Set',
-    brand: 'LittleChef',
-    category: 'kitchen',
-    subcategory: 'Toy kitchen sets (Big)',
-    gender: ['girls', 'boys', 'unisex'],
-    ageGroup: '3-10 years',
-    price: 2199,
-    mrp: 9999,
-    discount: 78,
-    images: [
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
-      'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=800&q=80',
-      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=800&q=80',
-    ],
-    description: 'The most complete toy kitchen set! This 85-piece deluxe playset includes a full kitchen station with stove, oven, sink, fridge — all with realistic lights and sounds. Includes 85 accessories: pots, pans, utensils, play food, and more. Sparks creativity and role-play!',
-    features: [
-      '85-piece complete kitchen set',
-      'Realistic lights and cooking sounds',
-      'Stove, oven, sink, and refrigerator',
-      'Includes play food and utensils',
-      'Height: 100cm — perfect for kids',
-      'BIS certified, food-grade safe plastic',
-    ],
-    manufacturer: 'Funskool India Ltd.',
-    manufacturerAddress: '7th Cross, SIPCOT Industrial Complex, Hosur, Tamil Nadu 635109',
-    countryOfOrigin: 'India',
-    material: 'BPA-free ABS plastic',
-    ageRating: '3+',
-    weight: '5.5 kg',
-    dimensions: '80 × 35 × 100 cm',
-    inStock: true,
-    stockCount: 78,
-    rating: 4.8,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: '78% OFF',
-    isFeatured: true,
-    tags: ['toy kitchen', 'play kitchen', 'kitchen set', 'role play', 'cooking toy'],
-  },
-  // TOY HOUSE
-  {
-    id: 'th-001',
-    name: 'Dreamy Dollhouse — 3-Floor Mansion with Furniture',
-    brand: 'DreamHome',
-    category: 'houses',
-    subcategory: 'Toy houses',
-    gender: ['girls', 'unisex'],
-    ageGroup: '3-12 years',
-    price: 3499,
-    mrp: 14999,
-    discount: 77,
-    images: [
-      'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=800&q=80',
-      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80',
-      'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
-    ],
-    description: 'Welcome to the most beautiful dollhouse! This 3-floor mansion comes fully furnished with 60+ pieces including furniture, appliances, and a family of dolls. LED lights on every floor, working elevator, and realistic details make this the ultimate play companion.',
-    features: [
-      '3-floor mansion with 6 rooms',
-      '60+ furniture and accessory pieces',
-      'LED lights on all floors (battery operated)',
-      'Working elevator mechanism',
-      'Comes with doll family (4 figures)',
-      'Easy assembly — no tools needed',
-    ],
-    manufacturer: 'DreamHome Toys India',
-    manufacturerAddress: 'Unit 23, Toy Park, Sivakasi, Tamil Nadu 626189',
-    countryOfOrigin: 'China',
-    material: 'Non-toxic MDF wood, ABS plastic',
-    ageRating: '3+',
-    weight: '4.8 kg',
-    dimensions: '70 × 35 × 90 cm',
-    inStock: true,
-    stockCount: 34,
-    rating: 4.7,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: 'NEW ARRIVAL',
-    isNew: true,
-    tags: ['dollhouse', 'toy house', 'mansion', 'girls toy', 'furnished dollhouse'],
-  },
-  // STEM TOYS
-  {
-    id: 'st-001',
-    name: 'Robotics Engineering Kit — Build 15 Robots',
-    brand: 'TechKidz',
-    category: 'stem',
-    subcategory: 'STEM & Educational',
-    gender: ['boys', 'girls', 'unisex'],
-    ageGroup: '8-16 years',
-    price: 1999,
-    mrp: 8999,
-    discount: 78,
-    images: [
-      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80',
-      'https://images.unsplash.com/photo-1518829025-5e12980abcca?w=800&q=80',
-      'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=80',
-      'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-    ],
-    description: 'Ignite your child\'s passion for engineering! This robotics kit lets kids build 15 different working robots including walking robots, solar robots, and obstacle-avoiding robots. Teaches coding logic, mechanics, and electronics through play. No soldering required!',
-    features: [
-      'Build 15 different working robots',
-      'Teaches STEM concepts through play',
-      'Solar-powered and motor-driven models',
-      'Includes detailed instruction booklet',
-      'Compatible with beginner coding apps',
-      'Award-winning educational toy',
-    ],
-    manufacturer: 'TechKidz Education Pvt. Ltd.',
-    manufacturerAddress: 'Tower B, Tech Park, Whitefield, Bengaluru, Karnataka 560066',
-    countryOfOrigin: 'India',
-    material: 'ABS plastic, electronic components',
-    ageRating: '8+',
-    weight: '1.5 kg',
-    dimensions: '40 × 30 × 12 cm',
-    inStock: true,
-    stockCount: 203,
-    rating: 4.8,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: '🏆 AWARD WINNING',
-    isFeatured: true,
-    tags: ['robotics', 'STEM', 'educational toy', 'coding', 'science kit'],
-  },
-  // COLLECTIBLES
-  {
-    id: 'co-001',
-    name: 'Anime Collectible Blind Box Series — 12 Figures',
-    brand: 'KaidoBox',
-    category: 'collectibles',
-    subcategory: 'Collectibles & Blind Boxes',
-    gender: ['adults', 'men', 'women', 'unisex'],
-    ageGroup: '15+ years',
-    price: 1799,
-    mrp: 7999,
-    discount: 78,
-    images: [
-      'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=80',
-      'https://images.unsplash.com/photo-1518829025-5e12980abcca?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=800&q=80',
-      'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&q=80',
-    ],
-    description: 'Collect them all! This premium anime blind box series features 12 beautifully crafted vinyl figures from popular anime universes. Each box is a surprise — will you get the ultra-rare SECRET figure? Perfect for display, gifting, and the ultimate collector\'s shelf!',
-    features: [
-      '12 figures in the series — collect all!',
-      '1 secret ultra-rare figure per series',
-      'Premium vinyl with hand-painted details',
-      '10cm tall — perfect display size',
-      'Collector-grade packaging',
-      'Officially licensed designs',
-    ],
-    manufacturer: 'KaidoBox Asia Pvt. Ltd.',
-    manufacturerAddress: 'Unit 5, Creative Hub, Andheri East, Mumbai, Maharashtra 400069',
-    countryOfOrigin: 'China',
-    material: 'Premium PVC vinyl',
-    ageRating: '15+',
-    weight: '200g',
-    dimensions: '12 × 10 × 12 cm',
-    inStock: true,
-    stockCount: 445,
-    rating: 4.5,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: 'ADULTS LOVE',
-    tags: ['collectible', 'blind box', 'anime', 'vinyl figure', 'adults'],
-  },
-  // WELLNESS - VIBRATOR
-  {
-    id: 'wv-001',
-    name: 'Personal Wellness Massager — 10 Modes Whisper-Quiet',
-    brand: 'BloomWell',
-    category: 'wellness',
-    subcategory: 'Sexual Wellness',
-    gender: ['women', 'adults'],
-    ageGroup: '18+ years',
-    price: 1299,
-    mrp: 5999,
-    discount: 78,
-    images: [
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
-      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80',
-      'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=800&q=80',
-      'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-    ],
-    description: 'Designed for wellness and self-care, this personal massager features 10 vibration modes for ultimate relaxation. Medical-grade silicone, USB rechargeable, 100% waterproof for bath use. Discreet packaging. For adult wellness use only.',
-    features: [
-      '10 vibration modes and intensities',
-      'Medical-grade body-safe silicone',
-      'Whisper-quiet motor — 40dB max',
-      'USB rechargeable — 2 hour battery life',
-      '100% IPX7 waterproof',
-      'Discreet plain packaging',
-    ],
-    manufacturer: 'BloomWell Health Pvt. Ltd.',
-    manufacturerAddress: 'B-12, Corporate Park, Sector 142, Noida, Uttar Pradesh 201304',
-    countryOfOrigin: 'China',
-    material: 'Medical-grade silicone, ABS',
-    ageRating: '18+',
-    weight: '120g',
-    dimensions: '18 × 4 × 4 cm',
-    inStock: true,
-    stockCount: 289,
-    rating: 4.7,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: '18+ ONLY',
-    tags: ['wellness', 'massager', 'adult wellness', 'self care', 'waterproof'],
-  },
-  // FAT BURNER
-  {
-    id: 'fb-001',
-    name: 'TrimFit Fat Burner Supplement — 60 Capsules',
-    brand: 'TrimFit',
-    category: 'wellness',
-    subcategory: 'Body & Aesthetic',
-    gender: ['men', 'women', 'adults'],
-    ageGroup: '18+ years',
-    price: 799,
-    mrp: 3499,
-    discount: 77,
-    images: [
-      'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=800&q=80',
-      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80',
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80',
-    ],
-    description: 'Formulated with natural ingredients including Green Tea Extract, Garcinia Cambogia, and L-Carnitine, TrimFit supports your fitness journey. Best used alongside a balanced diet and regular exercise. FSSAI approved. Consult a doctor before use.',
-    features: [
-      'Natural ingredients: Green Tea, Garcinia, L-Carnitine',
-      'FSSAI approved food supplement',
-      '60 capsules — 30-day supply',
-      'Vegetarian capsules',
-      'No added steroids or hormones',
-      'Made in India under ISO certified facility',
-    ],
-    manufacturer: 'TrimFit Nutraceuticals Pvt. Ltd.',
-    manufacturerAddress: 'Plot 34, Pharma Zone, Baddi, Himachal Pradesh 173205',
-    countryOfOrigin: 'India',
-    material: 'HPMC capsule shell with herbal extract blend',
-    ageRating: '18+',
-    weight: '150g',
-    dimensions: '8 × 6 × 12 cm',
-    inStock: true,
-    stockCount: 156,
-    rating: 4.3,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 4),
-    badge: 'HEALTH PICK',
-    tags: ['fat burner', 'weight loss', 'supplement', 'fitness', 'wellness'],
-  },
-  // KOREAN SKIN CREAM
-  {
-    id: 'sk-001',
-    name: 'Seoul Glow Korean Skin Whitening Cream — 50g',
-    brand: 'Seoul Glow',
-    category: 'wellness',
-    subcategory: 'Body & Aesthetic',
-    gender: ['women', 'men', 'adults'],
-    ageGroup: '18+ years',
-    price: 599,
-    mrp: 2799,
-    discount: 79,
-    images: [
-      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80',
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
-      'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80',
-    ],
-    description: 'Inspired by Korean skincare traditions, this brightening cream contains Niacinamide, Kojic Acid, and Vitamin C to even skin tone and reduce dark spots. Dermatologically tested. Paraben-free, cruelty-free formula. Results visible in 4 weeks with regular use.',
-    features: [
-      'Key ingredients: Niacinamide 5%, Kojic Acid, Vitamin C',
-      'Dermatologically tested formula',
-      'Paraben-free, cruelty-free',
-      'SPF 15 sun protection',
-      'Suitable for all skin types',
-      'CDSCO approved cosmetic product',
-    ],
-    manufacturer: 'Seoul Glow Cosmetics India',
-    manufacturerAddress: 'Unit 8, Cosmetic Park, Manesar, Gurugram, Haryana 122051',
-    countryOfOrigin: 'India',
-    material: 'Cosmetic cream formulation',
-    ageRating: '18+',
-    weight: '50g',
-    dimensions: '6 × 6 × 5 cm',
-    inStock: true,
-    stockCount: 423,
-    rating: 4.4,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 4),
-    badge: 'K-BEAUTY',
-    tags: ['korean cream', 'skin brightening', 'whitening cream', 'niacinamide', 'skincare'],
-  },
-  // PLAY BOX
-  {
-    id: 'pb-001',
-    name: 'Couple\'s Play Box — Premium Intimacy Kit',
-    brand: 'BloomWell',
-    category: 'wellness',
-    subcategory: 'Sexual Wellness',
-    gender: ['adults', 'men', 'women'],
-    ageGroup: '18+ years',
-    price: 2499,
-    mrp: 9999,
-    discount: 75,
-    images: [
-      'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80',
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
-      'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=800&q=80',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80',
-    ],
-    description: 'The ultimate couple\'s wellness kit, curated for intimacy and connection. This premium play box includes a selection of wellness products, massage oils, and accessories — all in beautiful gift packaging. 100% discreet shipping. For adults 18+ only.',
-    features: [
-      'Premium curated couple\'s wellness kit',
-      '6+ products in one gift box',
-      'Includes massage oil, accessories, and more',
-      'Beautiful gift packaging',
-      '100% discreet plain packaging delivery',
-      'All products body-safe and tested',
-    ],
-    manufacturer: 'BloomWell Health Pvt. Ltd.',
-    manufacturerAddress: 'B-12, Corporate Park, Sector 142, Noida, Uttar Pradesh 201304',
-    countryOfOrigin: 'India',
-    material: 'Various — see individual product details',
-    ageRating: '18+',
-    weight: '800g',
-    dimensions: '30 × 25 × 10 cm',
-    inStock: true,
-    stockCount: 89,
-    rating: 4.6,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 5),
-    badge: '18+ COUPLES',
-    tags: ['couples kit', 'intimacy', 'wellness kit', 'play box', 'adult gift'],
-  },
-  // HEIGHT INCREASE
-  {
-    id: 'hi-001',
-    name: 'GrowTall Height Booster Supplement — 90 Tablets',
-    brand: 'GrowTall',
-    category: 'wellness',
-    subcategory: 'Body & Aesthetic',
-    gender: ['men', 'women', 'adults'],
-    ageGroup: '15-25 years',
-    price: 899,
-    mrp: 3999,
-    discount: 78,
-    images: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
-      'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80',
-      'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
-      'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=800&q=80',
-      'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80',
-    ],
-    description: 'GrowTall is a natural nutritional supplement supporting healthy bone and cartilage development. Enriched with Calcium, Vitamin D3, Zinc, and Ashwagandha. Best for teens and young adults during active growth phases. FSSAI approved. Consult doctor before use.',
-    features: [
-      'Rich in Calcium, Vitamin D3, Zinc, Magnesium',
-      'Ashwagandha root extract for bone health',
-      'FSSAI approved nutritional supplement',
-      '90 tablets — 3-month supply',
-      'Vegetarian tablets',
-      'No artificial colours or flavours',
-    ],
-    manufacturer: 'GrowTall Nutrition India',
-    manufacturerAddress: 'Plot 12, Pharma SEZ, Hyderabad, Telangana 500078',
-    countryOfOrigin: 'India',
-    material: 'Nutritional supplement tablets',
-    ageRating: '15+',
-    weight: '200g',
-    dimensions: '7 × 7 × 12 cm',
-    inStock: true,
-    stockCount: 234,
-    rating: 4.2,
-    reviewCount: 1000,
-    reviews: generateReviews(20, 4),
-    badge: 'HEALTH',
-    tags: ['height booster', 'calcium supplement', 'vitamin D', 'bone health', 'growth supplement'],
-  },
+  // ──────────────────────── HOT WHEELS ────────────────────────
+  {id:'hw-001',name:'Hot Wheels 50-Car Collector Pack',brand:'Hot Wheels',category:'vehicles',subcategory:'Hot Wheels',gender:['boys','unisex'],ageGroup:'3–12 yrs',price:1499,mrp:7999,discount:81,images:IMG.hotwheels,description:'The ultimate Hot Wheels collector pack — 50 die-cast metal cars in vibrant colors. Compatible with all tracks.',features:['50 die-cast 1:64 scale cars','BIS certified, child-safe','Works with all Hot Wheels tracks','Collector display packaging'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'Die-cast zinc alloy',ageRating:'3+',weight:'1.2 kg',dimensions:'35×28×8 cm',inStock:true,stockCount:243,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),badge:'81% OFF',isFeatured:true,isBestseller:true,tags:['hot wheels','die cast','toy cars','boys']},
+  {id:'hw-002',name:'Hot Wheels Monster Truck Mega Set',brand:'Hot Wheels',category:'vehicles',subcategory:'Hot Wheels',gender:['boys','unisex'],ageGroup:'4–10 yrs',price:899,mrp:3999,discount:78,images:IMG.hotwheels,description:'Giant monster trucks with oversized wheels, real suspension action, and battle battle arena. Crash, smash, repeat!',features:['4 monster trucks in set','Real suspension springs','Crash battle arena included','Pull-back friction motor'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'Die-cast & ABS plastic',ageRating:'4+',weight:'800g',dimensions:'30×22×10 cm',inStock:true,stockCount:120,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),badge:'NEW',isNew:true,tags:['hot wheels','monster truck']},
+  {id:'hw-003',name:'Hot Wheels Track Builder Loop Kit',brand:'Hot Wheels',category:'vehicles',subcategory:'Hot Wheels',gender:['boys','unisex'],ageGroup:'5–14 yrs',price:1999,mrp:8499,discount:76,images:IMG.hotwheels,description:'Build epic loop tracks with this 15-piece track builder set. Create your own stunt courses!',features:['15 track pieces + connector','3 loop sections','Launcher included','2 cars included'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'ABS plastic',ageRating:'5+',weight:'600g',dimensions:'45×30×10 cm',inStock:true,stockCount:87,rating:4.8,reviewCount:1000,reviews:genReviews(20,5),isFeatured:true,tags:['hot wheels','track','stunt']},
+
+  // ──────────────────────── RIDE-ON CARS ────────────────────────
+  {id:'rc-001',name:'Electric Ride-On SUV — 12V Remote Control',brand:'KidzRide',category:'vehicles',subcategory:'Toy cars (Big)',gender:['boys','girls','unisex'],ageGroup:'2–7 yrs',price:8999,mrp:34999,discount:74,images:IMG.rideon,description:'Let your little one drive their own SUV! 12V battery, parental remote, LED headlights, MP3 player, seatbelt.',features:['12V rechargeable battery','Parental remote control','LED headlights & horn','Built-in MP3 + USB','Seatbelt, supports 30 kg'],manufacturer:MFR_PUNE.m,manufacturerAddress:MFR_PUNE.a,countryOfOrigin:'China',material:'PP plastic, steel frame',ageRating:'2–7',weight:'12 kg',dimensions:'105×65×55 cm',inStock:true,stockCount:45,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),badge:'74% OFF',isFeatured:true,tags:['ride on car','electric car','kids car']},
+  {id:'rc-002',name:'Battery-Powered Jeep with Leather Seat',brand:'KidzRide',category:'vehicles',subcategory:'Toy cars (Big)',gender:['boys','girls','unisex'],ageGroup:'3–8 yrs',price:11999,mrp:44999,discount:73,images:IMG.rideon,description:'Premium 24V dual-motor jeep with soft leather seat, rubber tyres, and full remote control. Goes 8 km/h!',features:['24V dual-motor power','Soft leather seat','Real rubber tyres','8 km/h max speed','2.4GHz remote'],manufacturer:MFR_PUNE.m,manufacturerAddress:MFR_PUNE.a,countryOfOrigin:'China',material:'PP plastic, steel chassis, real rubber',ageRating:'3+',weight:'18 kg',dimensions:'120×75×60 cm',inStock:true,stockCount:22,rating:4.8,reviewCount:1000,reviews:genReviews(20,5),badge:'PREMIUM',isFeatured:true,tags:['ride on jeep','24V','electric','kids']},
+  {id:'rc-003',name:'Mini Tractor Ride-On with Trailer',brand:'KidzRide',category:'vehicles',subcategory:'Toy cars (Big)',gender:['boys','unisex'],ageGroup:'2–5 yrs',price:3499,mrp:12999,discount:73,images:IMG.rideon,description:'Adorable mini tractor with detachable trailer. Battery powered, push-start, slow safe speed for toddlers.',features:['6V battery powered','Detachable trailer','Slow safe speed 2 km/h','Push start button'],manufacturer:MFR_PUNE.m,manufacturerAddress:MFR_PUNE.a,countryOfOrigin:'China',material:'PP plastic',ageRating:'2+',weight:'6 kg',dimensions:'85×45×50 cm',inStock:true,stockCount:67,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),tags:['tractor','ride on','toddler']},
+
+  // ──────────────────────── SCOOTERS ────────────────────────
+  {id:'sc-001',name:'Kids 3-Wheel LED Light Scooter',brand:'ZoomKids',category:'outdoor',subcategory:'Toy scooters',gender:['boys','girls','unisex'],ageGroup:'3–10 yrs',price:1299,mrp:5999,discount:78,images:IMG.outdoor,description:'3-wheel scooter with pressure-activated LED wheels, adjustable handlebar, rear foot brake. Safe & fun!',features:['LED light-up wheels (no battery)','3-wheel stable design','Adjustable handle 65–95 cm','Rear foot brake','Foldable'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'Aluminium, ABEC-7 bearings, PU wheels',ageRating:'3+',weight:'3.2 kg',dimensions:'60×40×95 cm',inStock:true,stockCount:167,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),badge:'78% OFF',isFeatured:true,tags:['scooter','LED','3 wheel','kids']},
+  {id:'sc-002',name:'Pro Stunt Scooter — Aluminium Deck',brand:'ZoomKids',category:'outdoor',subcategory:'Toy scooters',gender:['boys','unisex'],ageGroup:'8–16 yrs',price:2499,mrp:9999,discount:75,images:IMG.outdoor,description:'Professional stunt scooter with aircraft-grade aluminium deck, 110mm PU wheels, and 360° handlebars. For beginners to pros.',features:['Aircraft-grade aluminium deck','110mm PU wheels','360° spinning handlebars','Brake system','Anti-slip deck grip'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'Aluminium alloy, PU',ageRating:'8+',weight:'4.2 kg',dimensions:'70×10×90 cm',inStock:true,stockCount:89,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),tags:['stunt scooter','pro','trick scooter']},
+  {id:'sc-003',name:'Electric Balance Scooter Hoverboard',brand:'ZoomKids',category:'outdoor',subcategory:'Toy scooters',gender:['boys','girls','adults','unisex'],ageGroup:'8+ yrs',price:7999,mrp:29999,discount:73,images:IMG.outdoor,description:'Self-balancing electric hoverboard with 6.5" wheels, 10 km/h top speed, LED lights, and Bluetooth speaker.',features:['Self-balancing AI technology','6.5" wheels, 10 km/h','Bluetooth speaker + LED','2-hour ride time','UL2272 certified safe'],manufacturer:MFR_PUNE.m,manufacturerAddress:MFR_PUNE.a,countryOfOrigin:'China',material:'ABS plastic, aluminium, lithium battery',ageRating:'8+',weight:'10 kg',dimensions:'55×18×18 cm',inStock:true,stockCount:34,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),isFeatured:true,tags:['hoverboard','electric','self balancing']},
+
+  // ──────────────────────── PLUSH & TEDDIES ────────────────────────
+  {id:'pl-001',name:'Giant Fluffy Unicorn Plush 90cm',brand:'ToyFactory',category:'plush',subcategory:'Plush Toys',gender:['girls','unisex'],ageGroup:'2+ yrs',price:899,mrp:4999,discount:82,images:IMG.plush,description:'Giant 90cm unicorn with rainbow mane, glitter horn, ultra-soft plush. Machine washable. Best gift ever!',features:['90cm jumbo size','Ultra-soft premium plush','Machine washable','Hypoallergenic stuffing'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'Polyester plush, PP cotton',ageRating:'2+',weight:'800g',dimensions:'90×30×25 cm',inStock:true,stockCount:156,rating:4.8,reviewCount:1000,reviews:genReviews(20,5),badge:'BESTSELLER',isFeatured:true,isBestseller:true,tags:['unicorn','plush','giant','girls']},
+  {id:'pl-002',name:'Classic Brown Teddy Bear 60cm',brand:'HugMe',category:'plush',subcategory:'Teddys',gender:['girls','boys','unisex'],ageGroup:'0+ yrs',price:549,mrp:2999,discount:82,images:IMG.plush,description:'The timeless classic 60cm teddy bear. Ultra-soft high-pile plush, safety embroidered eyes, machine washable.',features:['60cm premium teddy','Embroidered eyes (safe)','Machine washable','Hypoallergenic'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'Polyester plush, PP cotton',ageRating:'0+',weight:'550g',dimensions:'60×30×20 cm',inStock:true,stockCount:312,rating:4.9,reviewCount:1000,reviews:genReviews(20,5),badge:'🐻 MOST LOVED',isFeatured:true,isBestseller:true,tags:['teddy bear','soft toy','gift']},
+  {id:'pl-003',name:'Stuffed Animal Zoo Set — 12 Animals',brand:'ToyFactory',category:'plush',subcategory:'Plush Toys',gender:['boys','girls','unisex'],ageGroup:'1–8 yrs',price:1199,mrp:5499,discount:78,images:IMG.plush,description:'12-piece mini stuffed animal set — lion, elephant, giraffe, zebra, and more. Perfect for imaginative play.',features:['12 mini plush animals','Various sizes 15–25 cm','Non-toxic, BPA free','Great for travel'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'Polyester plush',ageRating:'1+',weight:'1 kg',dimensions:'30×25×15 cm',inStock:true,stockCount:200,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),tags:['zoo animals','plush set','mini stuffed']},
+  {id:'pl-004',name:'Giant Panda Plush 1 Metre',brand:'HugMe',category:'plush',subcategory:'Plush Toys',gender:['unisex'],ageGroup:'0+ yrs',price:1299,mrp:6999,discount:81,images:IMG.plush,description:'Massive 1-metre giant panda plush — perfect for cuddles, room decor, and the best birthday gift.',features:['1 metre giant panda','Super soft luxury plush','Stand-alone posture','Machine washable'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'Premium polyester plush',ageRating:'0+',weight:'1.8 kg',dimensions:'100×40×35 cm',inStock:true,stockCount:88,rating:4.9,reviewCount:1000,reviews:genReviews(20,5),isBestseller:true,tags:['panda','giant plush','1 metre']},
+  {id:'pl-005',name:'Dino Plush Collection — 6 Dinosaurs',brand:'ToyFactory',category:'plush',subcategory:'Plush Toys',gender:['boys','unisex'],ageGroup:'2+ yrs',price:799,mrp:3999,discount:80,images:IMG.plush,description:'6 adorable stuffed dinosaurs — T-Rex, Triceratops, Brachiosaurus and more. Soft, safe and educational.',features:['6 dino plushies','T-Rex, Triceratops, Stegosaurus, Raptor, Brachiosaurus, Spinosaurus','Embroidered eyes','Educational name tags'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'Polyester plush',ageRating:'2+',weight:'700g',dimensions:'25×20×15 cm',inStock:true,stockCount:145,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),tags:['dinosaur','plush','dino','boys']},
+
+  // ──────────────────────── DOLLS ────────────────────────
+  {id:'dl-001',name:'Fashion Doll Deluxe Set — 30 Accessories',brand:'GlamDoll',category:'dolls',subcategory:'Dolls',gender:['girls'],ageGroup:'3–12 yrs',price:699,mrp:3999,discount:83,images:IMG.doll,description:'30cm fashion doll with articulated joints, 5 outfits, shoes, handbags, jewelry, styling brush. Indian + Western outfits.',features:['30cm articulated doll','5 designer outfits','30+ accessories','Real styleable hair'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'ABS plastic, nylon hair, polyester',ageRating:'3+',weight:'400g',dimensions:'30×20×8 cm',inStock:true,stockCount:89,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),badge:'83% OFF',isFeatured:true,tags:['doll','fashion doll','accessories','girls']},
+  {id:'dl-002',name:'Baby Doll with Sounds — Newborn Set',brand:'MomCare',category:'dolls',subcategory:'Dolls',gender:['girls'],ageGroup:'2–7 yrs',price:499,mrp:2499,discount:80,images:IMG.doll,description:'Realistic newborn baby doll with lifelike sounds — crying, cooing, giggling. Comes with cradle, bottle, and diaper.',features:['Realistic newborn sounds','Soft-body baby doll 40cm','Cradle, bottle, diaper included','Eyes open/close'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'Soft vinyl, fabric body',ageRating:'2+',weight:'500g',dimensions:'40×20×15 cm',inStock:true,stockCount:134,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),tags:['baby doll','newborn','doll sounds']},
+  {id:'dl-003',name:'Princess Barbie Dream Castle Set',brand:'BarbieIndia',category:'dolls',subcategory:'Dolls',gender:['girls'],ageGroup:'3–12 yrs',price:2499,mrp:9999,discount:75,images:IMG.doll,description:'Princess doll with glittering dream castle, 2 dolls, 60 accessories. Lights, sounds and working elevator!',features:['3-floor dream castle','2 princess dolls included','60+ accessories','LED lights + elevator'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'ABS plastic',ageRating:'3+',weight:'3.5 kg',dimensions:'55×30×70 cm',inStock:true,stockCount:45,rating:4.8,reviewCount:1000,reviews:genReviews(20,5),isNew:true,tags:['barbie','princess','castle','dream']},
+
+  // ──────────────────────── KITCHEN ────────────────────────
+  {id:'kt-001',name:'Dream Kitchen Playset — 85 Pieces',brand:'LittleChef',category:'kitchen',subcategory:'Toy kitchen sets (Big)',gender:['girls','boys','unisex'],ageGroup:'3–10 yrs',price:2199,mrp:9999,discount:78,images:IMG.kitchen,description:'85-piece deluxe kitchen with stove, oven, sink, fridge — working lights and sounds, 85 accessories.',features:['85-piece complete set','Realistic lights & sounds','Stove, oven, sink, fridge','Includes play food & utensils','100cm height for kids'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'BPA-free ABS plastic',ageRating:'3+',weight:'5.5 kg',dimensions:'80×35×100 cm',inStock:true,stockCount:78,rating:4.8,reviewCount:1000,reviews:genReviews(20,5),badge:'78% OFF',isFeatured:true,tags:['toy kitchen','play kitchen','kitchen set','role play']},
+  {id:'kt-002',name:'Wooden Kitchen Set — Montessori Style',brand:'WoodPlay',category:'kitchen',subcategory:'Toy kitchen sets (Big)',gender:['girls','boys','unisex'],ageGroup:'2–7 yrs',price:3999,mrp:14999,discount:73,images:IMG.kitchen,description:'Eco-friendly wooden kitchen with real working knobs, chalkboard menu, and 40 wooden food accessories.',features:['100% sustainble wood','Working click knobs','Chalkboard menu board','40 wooden food pieces','Non-toxic paint'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'Rubberwood, MDF, non-toxic paint',ageRating:'2+',weight:'12 kg',dimensions:'85×35×90 cm',inStock:true,stockCount:28,rating:4.9,reviewCount:1000,reviews:genReviews(20,5),badge:'ECO',tags:['wooden kitchen','montessori','eco friendly']},
+
+  // ──────────────────────── HOUSES ────────────────────────
+  {id:'th-001',name:'Dreamy 3-Floor Dollhouse — Furnished',brand:'DreamHome',category:'houses',subcategory:'Toy houses',gender:['girls','unisex'],ageGroup:'3–12 yrs',price:3499,mrp:14999,discount:77,images:IMG.house,description:'3-floor mansion with LED lights, working elevator, 60+ furniture pieces, and doll family. No tools needed!',features:['3 floors, 6 rooms','60+ furniture pieces','LED lights all floors','Working elevator','4 doll figures'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'Non-toxic MDF, ABS plastic',ageRating:'3+',weight:'4.8 kg',dimensions:'70×35×90 cm',inStock:true,stockCount:34,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),badge:'NEW',isNew:true,isFeatured:true,tags:['dollhouse','toy house','mansion','furnished']},
+  {id:'th-002',name:'Camping Tent Playhouse — Kids Indoor',brand:'PlaySpace',category:'houses',subcategory:'Toy houses',gender:['boys','girls','unisex'],ageGroup:'3–10 yrs',price:1299,mrp:5499,discount:76,images:IMG.house,description:'Large indoor camping tent playhouse with fairy lights, tunnel entrance, and carry bag. Folds in seconds.',features:['Large 130×100×90 cm','Fairy lights included','Tunnel entrance','Folds flat, carry bag'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'Polyester, fibreglass rods',ageRating:'3+',weight:'1.8 kg',dimensions:'130×100×90 cm',inStock:true,stockCount:112,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),tags:['playhouse','tent','indoor','camping']},
+
+  // ──────────────────────── STEM ────────────────────────
+  {id:'st-001',name:'Robotics Engineering Kit — 15 Robots',brand:'TechKidz',category:'stem',subcategory:'STEM & Educational',gender:['boys','girls','unisex'],ageGroup:'8–16 yrs',price:1999,mrp:8999,discount:78,images:IMG.stem,description:'Build 15 working robots! Solar, motor-driven, and obstacle-avoiding. Teaches coding logic and mechanics.',features:['15 different robot builds','Solar-powered models','App-compatible coding','Instruction booklet'],manufacturer:MFR_BANG.m,manufacturerAddress:MFR_BANG.a,countryOfOrigin:'India',material:'ABS plastic, electronics',ageRating:'8+',weight:'1.5 kg',dimensions:'40×30×12 cm',inStock:true,stockCount:203,rating:4.8,reviewCount:1000,reviews:genReviews(20,5),badge:'🏆 AWARD WINNING',isFeatured:true,tags:['robotics','STEM','coding','science kit']},
+  {id:'st-002',name:'Chemistry Lab Kit — 50 Experiments',brand:'TechKidz',category:'stem',subcategory:'STEM & Educational',gender:['boys','girls','unisex'],ageGroup:'8–14 yrs',price:899,mrp:3999,discount:78,images:IMG.stem,description:'50 safe chemistry experiments kids can do at home. Includes test tubes, chemicals, safety goggles, and booklet.',features:['50 safe experiments','Real test tubes & chemicals','Safety goggles included','Detailed instruction booklet'],manufacturer:MFR_BANG.m,manufacturerAddress:MFR_BANG.a,countryOfOrigin:'India',material:'ABS plastic, chemical compounds',ageRating:'8+',weight:'1 kg',dimensions:'35×25×10 cm',inStock:true,stockCount:178,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),tags:['chemistry','science','lab kit','experiments']},
+  {id:'st-003',name:'Telescope 70mm — Kids Astronomy',brand:'StarGaze',category:'stem',subcategory:'STEM & Educational',gender:['boys','girls','unisex'],ageGroup:'8+ yrs',price:1499,mrp:5999,discount:75,images:IMG.stem,description:'70mm refractor telescope for kids. See the moon, stars, and planets in crisp detail. With tripod and phone adapter.',features:['70mm aperture, 300mm focal length','3 eyepieces + 2× Barlow','Adjustable tripod','Phone camera adapter'],manufacturer:MFR_BANG.m,manufacturerAddress:MFR_BANG.a,countryOfOrigin:'China',material:'Aluminium, glass optics',ageRating:'8+',weight:'2.5 kg',dimensions:'60×20×15 cm',inStock:true,stockCount:67,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),tags:['telescope','astronomy','space','science']},
+  {id:'st-004',name:'Coding Robot Car — App Controlled',brand:'TechKidz',category:'stem',subcategory:'STEM & Educational',gender:['boys','girls','unisex'],ageGroup:'6–14 yrs',price:2499,mrp:9999,discount:75,images:IMG.stem,description:'Learn coding through play! This app-controlled robot car teaches block coding, line tracking, and obstacle avoidance.',features:['Block-based coding app','Obstacle avoidance sensor','Line-tracking mode','LED face expressions','Rechargeable USB'],manufacturer:MFR_BANG.m,manufacturerAddress:MFR_BANG.a,countryOfOrigin:'China',material:'ABS plastic, electronics',ageRating:'6+',weight:'500g',dimensions:'20×15×10 cm',inStock:true,stockCount:134,rating:4.8,reviewCount:1000,reviews:genReviews(20,5),isFeatured:true,tags:['coding robot','programming','STEM']},
+  {id:'st-005',name:'Magnetic Tiles Building Set — 100 Pieces',brand:'MagBuild',category:'stem',subcategory:'STEM & Educational',gender:['boys','girls','unisex'],ageGroup:'3–12 yrs',price:1799,mrp:7499,discount:76,images:IMG.stem,description:'100-piece translucent magnetic tiles in vivid colors. Build 3D structures, teach geometry and creativity.',features:['100 magnetic tiles','Translucent vivid colors','Strong magnets, safe edges','STEM award winner'],manufacturer:MFR_BANG.m,manufacturerAddress:MFR_BANG.a,countryOfOrigin:'China',material:'ABS plastic, rare earth magnets',ageRating:'3+',weight:'1.2 kg',dimensions:'35×28×10 cm',inStock:true,stockCount:220,rating:4.9,reviewCount:1000,reviews:genReviews(20,5),isBestseller:true,tags:['magnetic tiles','building blocks','STEM','creative']},
+
+  // ──────────────────────── COLLECTIBLES ────────────────────────
+  {id:'co-001',name:'Anime Blind Box Series — 12 Figures',brand:'KaidoBox',category:'collectibles',subcategory:'Collectibles',gender:['adults','men','women','unisex'],ageGroup:'15+ yrs',price:1799,mrp:7999,discount:78,images:IMG.collectible,description:'12-figure anime blind box series with secret ultra-rare figure. Hand-painted 10cm vinyl. Collect all!',features:['12 figures per series','1 secret rare figure','Hand-painted premium vinyl','10cm display size'],manufacturer:MFR_MUM.m,manufacturerAddress:MFR_MUM.a,countryOfOrigin:'China',material:'Premium PVC vinyl',ageRating:'15+',weight:'200g',dimensions:'12×10×12 cm',inStock:true,stockCount:445,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),badge:'ADULTS LOVE',isFeatured:true,tags:['blind box','anime','collectible','vinyl']},
+  {id:'co-002',name:'Lego-Style City Block 1000 Pieces',brand:'BrickCity',category:'collectibles',subcategory:'Collectibles',gender:['boys','girls','adults','unisex'],ageGroup:'8+ yrs',price:1299,mrp:5499,discount:76,images:IMG.collectible,description:'1000-piece Lego-compatible city building set — build a full city block with shops, vehicles, and minifigures.',features:['1000 Lego-compatible bricks','Full city block design','8 minifigures','Lego-compatible'],manufacturer:MFR_MUM.m,manufacturerAddress:MFR_MUM.a,countryOfOrigin:'China',material:'ABS plastic',ageRating:'8+',weight:'800g',dimensions:'40×30×10 cm',inStock:true,stockCount:189,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),tags:['lego','bricks','building blocks','city']},
+  {id:'co-003',name:'Action Figure Set — Marvel Heroes 6-Pack',brand:'HeroVerse',category:'collectibles',subcategory:'Collectibles',gender:['boys','men','unisex'],ageGroup:'6+ yrs',price:1499,mrp:5999,discount:75,images:IMG.collectible,description:'6-pack Marvel-style superhero action figures with articulated joints, accessories, and display stand.',features:['6 fully articulated heroes','15 cm tall each','Accessories & weapons','Display stand included'],manufacturer:MFR_MUM.m,manufacturerAddress:MFR_MUM.a,countryOfOrigin:'China',material:'PVC with metal joints',ageRating:'6+',weight:'600g',dimensions:'30×20×10 cm',inStock:true,stockCount:233,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),tags:['action figure','superhero','marvel','collectible']},
+  {id:'co-004',name:'Trading Card Game Booster Pack — 60 Cards',brand:'CardKings',category:'collectibles',subcategory:'Collectibles',gender:['boys','girls','adults','unisex'],ageGroup:'8+ yrs',price:499,mrp:1999,discount:75,images:IMG.collectible,description:'60-card booster pack for the CardKings trading card game. Includes 5 rare foil cards and 2 ultra-rare!',features:['60 cards per pack','5 rare foil cards','2 ultra-rare cards','Collectible tin box'],manufacturer:MFR_MUM.m,manufacturerAddress:MFR_MUM.a,countryOfOrigin:'India',material:'Premium card stock',ageRating:'8+',weight:'200g',dimensions:'15×10×3 cm',inStock:true,stockCount:567,rating:4.4,reviewCount:1000,reviews:genReviews(20,5),tags:['trading cards','TCG','collectible cards']},
+
+  // ──────────────────────── WELLNESS — GENERAL ────────────────────────
+  {id:'fb-001',name:'TrimFit Fat Burner — 60 Capsules',brand:'TrimFit',category:'wellness',subcategory:'Body & Aesthetic',gender:['men','women','adults'],ageGroup:'18+ yrs',price:799,mrp:3499,discount:77,images:IMG.supplement,description:'Natural fat burner with Green Tea Extract, Garcinia Cambogia & L-Carnitine. FSSAI approved. Use with diet + exercise.',features:['Green Tea, Garcinia, L-Carnitine','FSSAI approved','60 caps – 30-day supply','Vegetarian capsules','No steroids/hormones'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'India',material:'HPMC capsule, herbal extract blend',ageRating:'18+',weight:'150g',dimensions:'8×6×12 cm',inStock:true,stockCount:156,rating:4.3,reviewCount:1000,reviews:genReviews(20,4),badge:'HEALTH PICK',tags:['fat burner','weight loss','supplement']},
+  {id:'sk-001',name:'Seoul Glow Korean Brightening Cream',brand:'Seoul Glow',category:'wellness',subcategory:'Body & Aesthetic',gender:['women','men','adults'],ageGroup:'18+ yrs',price:599,mrp:2799,discount:79,images:IMG.skincare,description:'Korean-inspired brightening cream with Niacinamide 5%, Kojic Acid, Vitamin C. Dermatologically tested.',features:['Niacinamide 5%, Kojic Acid, Vitamin C','Dermatologically tested','SPF 15, all skin types','Paraben-free, cruelty-free'],manufacturer:MFR_SEOUL.m,manufacturerAddress:MFR_SEOUL.a,countryOfOrigin:'India',material:'Cosmetic cream',ageRating:'18+',weight:'50g',dimensions:'6×6×5 cm',inStock:true,stockCount:423,rating:4.4,reviewCount:1000,reviews:genReviews(20,4),badge:'K-BEAUTY',tags:['korean cream','brightening','skincare','niacinamide']},
+  {id:'hi-001',name:'GrowTall Height Booster — 90 Tablets',brand:'GrowTall',category:'wellness',subcategory:'Body & Aesthetic',gender:['men','women','adults'],ageGroup:'15–25 yrs',price:899,mrp:3999,discount:78,images:IMG.supplement,description:'Nutritional supplement with Calcium, Vitamin D3, Zinc, Ashwagandha for bone & cartilage support.',features:['Calcium, D3, Zinc, Magnesium, Ashwagandha','FSSAI approved','90 tabs – 3 month supply','Vegetarian'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'India',material:'Nutritional tablet',ageRating:'15+',weight:'200g',dimensions:'7×7×12 cm',inStock:true,stockCount:234,rating:4.2,reviewCount:1000,reviews:genReviews(20,4),badge:'HEALTH',tags:['height booster','calcium','growth supplement']},
+  {id:'br-001',name:'Breast Enhancement Cream — 50g',brand:'CurveCare',category:'wellness',subcategory:'Body & Aesthetic',gender:['women'],ageGroup:'18+ yrs',price:699,mrp:2999,discount:77,images:IMG.skincare,description:'Firming and enhancement cream with Fenugreek extract, Vitamin E, and natural botanicals. Moisturising formula.',features:['Fenugreek extract, Vitamin E','Firming & moisturising formula','Paraben-free, cruelty-free','CDSCO registered cosmetic'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'India',material:'Cosmetic cream',ageRating:'18+',weight:'50g',dimensions:'7×7×6 cm',inStock:true,stockCount:189,rating:4.1,reviewCount:1000,reviews:genReviews(20,4),badge:'18+ ONLY',tags:['breast cream','enhancement','women wellness']},
+  {id:'ia-001',name:'Intimate Area Brightening Serum',brand:'IntiGlow',category:'wellness',subcategory:'Body & Aesthetic',gender:['women','men','adults'],ageGroup:'18+ yrs',price:549,mrp:2499,discount:78,images:IMG.skincare,description:'Gentle brightening serum for intimate areas with Niacinamide, Licorice extract, and Aloe Vera. Dermatologist tested.',features:['Niacinamide + Licorice extract','Aloe Vera soothing formula','Dermatologist tested','pH balanced for sensitive areas'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'India',material:'Serum formula',ageRating:'18+',weight:'30ml',dimensions:'5×5×12 cm',inStock:true,stockCount:298,rating:4.3,reviewCount:1000,reviews:genReviews(20,4),tags:['intimate brightening','serum','skin care']},
+  {id:'pe-001',name:'Performance Booster Balm for Men',brand:'ManCore',category:'wellness',subcategory:'Sexual Wellness',gender:['men'],ageGroup:'18+ yrs',price:799,mrp:3499,discount:77,images:IMG.supplement,description:'Topical performance balm with natural herbs — Ashwagandha, Shilajit, and Saffron. For adult men 18+ only.',features:['Ashwagandha, Shilajit, Saffron','Topical balm, easy application','Warming sensation formula','Discreet packaging'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'India',material:'Herbal balm',ageRating:'18+',weight:'30g',dimensions:'5×5×7 cm',inStock:true,stockCount:178,rating:4.2,reviewCount:1000,reviews:genReviews(20,4),badge:'18+ MEN',tags:['performance balm','men wellness','booster']},
+
+  // ──────────────────────── SEX TOYS ────────────────────────
+  {id:'sx-001',name:'Personal Wellness Vibrator — 10 Modes',brand:'BloomWell',category:'sex',subcategory:'Sexual Wellness',gender:['women','adults'],ageGroup:'18+ yrs',price:1299,mrp:5999,discount:78,images:IMG.sex,description:'Personal body massager with 10 vibration modes, medical-grade silicone, USB rechargeable, 100% waterproof. For adults only.',features:['10 vibration modes','Medical-grade body-safe silicone','Whisper-quiet, 40dB max','USB rechargeable, 2hr battery','IPX7 100% waterproof','Discreet plain packaging'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'China',material:'Medical-grade silicone, ABS',ageRating:'18+',weight:'120g',dimensions:'18×4×4 cm',inStock:true,stockCount:289,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),badge:'🔞 18+',isFeatured:true,tags:['vibrator','personal massager','adult toy','waterproof']},
+  {id:'sx-002',name:'Couples Vibrating Ring — Dual Motor',brand:'BloomWell',category:'sex',subcategory:'Sexual Wellness',gender:['adults','men','women'],ageGroup:'18+ yrs',price:799,mrp:3499,discount:77,images:IMG.sex,description:'Dual-motor couples ring with 7 vibration patterns. Stretchy medical silicone fits all sizes. Waterproof.',features:['Dual motors for both partners','7 vibration patterns','Stretchy medical silicone','100% waterproof','USB rechargeable'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'China',material:'Medical-grade silicone',ageRating:'18+',weight:'80g',dimensions:'8×6×3 cm',inStock:true,stockCount:198,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),badge:'🔞 COUPLES',tags:['couples ring','vibrating ring','sex toy','couples']},
+  {id:'sx-003',name:'Premium Play Box — Couples Kit',brand:'BloomWell',category:'sex',subcategory:'Sexual Wellness',gender:['adults','men','women'],ageGroup:'18+ yrs',price:2499,mrp:9999,discount:75,images:IMG.sex,description:'Curated couples wellness kit with 6+ premium products, massage oil, accessories in luxury gift packaging.',features:['6+ products in one box','Includes massage oil & accessories','Luxury gift packaging','100% discreet delivery','All body-safe tested'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'India',material:'Various — all body-safe',ageRating:'18+',weight:'800g',dimensions:'30×25×10 cm',inStock:true,stockCount:89,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),badge:'18+ COUPLES',tags:['couples kit','play box','adult gift','sex kit']},
+  {id:'sx-004',name:'Wireless Remote Vibrator — App Controlled',brand:'BloomWell',category:'sex',subcategory:'Sexual Wellness',gender:['women','adults'],ageGroup:'18+ yrs',price:1799,mrp:7999,discount:78,images:IMG.sex,description:'App-controlled wireless vibrator with 12 patterns. Control from up to 10m or via smartphone app from anywhere.',features:['Smartphone app control anywhere','12 vibration patterns','10m wireless range','Medical-grade silicone','USB rechargeable, IPX7'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'China',material:'Medical-grade silicone',ageRating:'18+',weight:'95g',dimensions:'15×3.5×3.5 cm',inStock:true,stockCount:145,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),badge:'🔞 APP',tags:['app vibrator','remote vibrator','wireless','adult toy']},
+  {id:'sx-005',name:'G-Spot Rabbit Vibrator — Dual Stimulation',brand:'BloomWell',category:'sex',subcategory:'Sexual Wellness',gender:['women','adults'],ageGroup:'18+ yrs',price:1599,mrp:6999,discount:77,images:IMG.sex,description:'Classic dual-stimulation rabbit vibrator. 3-speed + 7 vibration patterns. Premium silicone, USB rechargeable.',features:['Dual stimulation design','3 speeds + 7 patterns','Premium body-safe silicone','Quiet motor < 45dB','USB rechargeable'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'China',material:'Premium silicone, ABS',ageRating:'18+',weight:'130g',dimensions:'20×5×5 cm',inStock:true,stockCount:167,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),badge:'🔞 18+',tags:['rabbit vibrator','g-spot','dual stimulation','adult']},
+  {id:'sx-006',name:'Male Masturbator — Pocket Stroker 3D',brand:'ManCore',category:'sex',subcategory:'Sexual Wellness',gender:['men','gay'],ageGroup:'18+ yrs',price:999,mrp:4499,discount:78,images:IMG.sex,description:'3D textured pocket stroker for men. Soft TPE material, discreet design, easy clean. Adults only.',features:['3D textured interior','Premium soft TPE material','Compact pocket size','Easy to clean','Discreet packaging'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'China',material:'Medical-grade TPE',ageRating:'18+',weight:'200g',dimensions:'15×7×7 cm',inStock:true,stockCount:234,rating:4.4,reviewCount:1000,reviews:genReviews(20,4),badge:'🔞 MEN',tags:['masturbator','male sex toy','pocket stroker','men']},
+  {id:'sx-007',name:'Anal Plug Set — 3 Sizes Beginner',brand:'BloomWell',category:'sex',subcategory:'Sexual Wellness',gender:['adults','gay','trans'],ageGroup:'18+ yrs',price:899,mrp:3999,discount:78,images:IMG.sex,description:'3-size beginner anal plug set in soft silicone. Perfect starter set. Flared base for safety, 100% waterproof.',features:['3 sizes: S, M, L','Soft body-safe silicone','Flared base — 100% safe','Smooth easy-clean surface','100% waterproof'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'China',material:'Medical-grade silicone',ageRating:'18+',weight:'150g',dimensions:'10×8×5 cm',inStock:true,stockCount:178,rating:4.3,reviewCount:1000,reviews:genReviews(20,4),badge:'🔞 18+',tags:['anal plug','beginner','adult toy','gay']},
+  {id:'sx-008',name:'Strap-On Harness Kit — Adjustable',brand:'BloomWell',category:'sex',subcategory:'Sexual Wellness',gender:['women','gay','trans','adults'],ageGroup:'18+ yrs',price:1999,mrp:8499,discount:76,images:IMG.sex,description:'Adjustable strap-on harness with 2 dildo sizes included. Fits all body sizes. Premium soft fabric harness.',features:['Adjustable O-ring harness','2 dildo sizes included','Fits waist 60–140 cm','Premium soft fabric','Universal ring system'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'China',material:'Nylon harness, silicone dildo',ageRating:'18+',weight:'400g',dimensions:'25×20×8 cm',inStock:true,stockCount:89,rating:4.4,reviewCount:1000,reviews:genReviews(20,4),badge:'🔞 18+',tags:['strap on','harness','lesbian','trans','sex toy']},
+  {id:'sx-009',name:'Bondage Kit — Beginner BDSM Set',brand:'VelvetBound',category:'sex',subcategory:'Sexual Wellness',gender:['adults','men','women'],ageGroup:'18+ yrs',price:1299,mrp:5499,discount:76,images:IMG.sex,description:'Beginner BDSM set — soft handcuffs, blindfold, feather tickler, ankle ties, and restraint ribbon. All vegan leather.',features:['5-piece beginner set','Vegan leather handcuffs + ankle ties','Satin blindfold','Feather tickler','Quick-release safety buckles'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'China',material:'Vegan leather, satin, feather',ageRating:'18+',weight:'300g',dimensions:'25×18×5 cm',inStock:true,stockCount:156,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),badge:'🔞 BDSM',tags:['bondage','bdsm kit','handcuffs','blindfold','adult']},
+  {id:'sx-010',name:'Massage Oil — Warming Sensual 100ml',brand:'BloomWell',category:'sex',subcategory:'Sexual Wellness',gender:['adults','men','women'],ageGroup:'18+ yrs',price:399,mrp:1799,discount:78,images:IMG.sex,description:'Warming sensual massage oil with Rose, Jasmine and Ylang-Ylang. Edible, body-safe, non-staining formula.',features:['Warming sensation formula','Edible & body-safe','Rose, Jasmine, Ylang-Ylang','Non-staining, skin-nourishing','100ml pump bottle'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'India',material:'Coconut oil base, natural essential oils',ageRating:'18+',weight:'120g',dimensions:'5×5×15 cm',inStock:true,stockCount:445,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),tags:['massage oil','sensual','warming','couples']},
+  {id:'sx-011',name:'Clitoral Suction Toy — 8 Intensity Levels',brand:'BloomWell',category:'sex',subcategory:'Sexual Wellness',gender:['women','adults'],ageGroup:'18+ yrs',price:1499,mrp:6499,discount:77,images:IMG.sex,description:'Air-pulse clitoral stimulator with 8 suction intensities. Non-contact technology. Whisper quiet. USB rechargeable.',features:['Air-pulse non-contact suction','8 intensity levels','Whisper quiet motor','USB rechargeable, IPX7','Medical-grade silicone tip'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'China',material:'Medical-grade silicone, ABS',ageRating:'18+',weight:'85g',dimensions:'12×4×4 cm',inStock:true,stockCount:213,rating:4.8,reviewCount:1000,reviews:genReviews(20,5),badge:'🔞 BESTSELLER',isFeatured:true,tags:['suction toy','clit stimulator','air pulse','women']},
+  {id:'sx-012',name:'Prostate Massager — P-Spot Vibrator',brand:'ManCore',category:'sex',subcategory:'Sexual Wellness',gender:['men','gay'],ageGroup:'18+ yrs',price:1299,mrp:5499,discount:76,images:IMG.sex,description:'Curved prostate massager targeting the P-spot. 10 vibration modes, body-safe silicone, USB rechargeable.',features:['Curved P-spot design','10 vibration modes','Body-safe premium silicone','USB rechargeable, waterproof','Quiet motor'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'China',material:'Medical-grade silicone',ageRating:'18+',weight:'110g',dimensions:'14×4×3 cm',inStock:true,stockCount:134,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),badge:'🔞 MEN',tags:['prostate massager','p-spot','gay','men','adult toy']},
+
+  // ──────────────────────── MORE KIDS TOYS ────────────────────────
+  {id:'lc-001',name:'Wooden Blocks Learning Set — 100 Pieces',brand:'WoodPlay',category:'toys',subcategory:'Educational',gender:['boys','girls','unisex'],ageGroup:'1–6 yrs',price:799,mrp:3499,discount:77,images:IMG.stem,description:'100-piece natural wooden blocks in 10 shapes and 8 colors. Teach stacking, counting, and creativity.',features:['100 wooden blocks','10 shapes, 8 colors','Non-toxic paint, smooth edges','Cotton storage bag'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'Natural rubberwood, non-toxic paint',ageRating:'1+',weight:'1.5 kg',dimensions:'30×25×15 cm',inStock:true,stockCount:267,rating:4.8,reviewCount:1000,reviews:genReviews(20,5),isBestseller:true,tags:['wooden blocks','educational','toddler','stacking']},
+  {id:'lc-002',name:'Kids Guitar — Acoustic Mini 30"',brand:'LittleRock',category:'toys',subcategory:'Musical',gender:['boys','girls','unisex'],ageGroup:'5–12 yrs',price:1299,mrp:5499,discount:76,images:IMG.outdoor,description:'Real acoustic guitar scaled for kids. 30" size, nylon strings, tuning pegs. Includes picks and strap.',features:['30" acoustic kids guitar','Nylon strings, easy on fingers','Tuning pegs, pick guard','Includes 3 picks & strap'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'Spruce top, basswood sides',ageRating:'5+',weight:'1.2 kg',dimensions:'90×35×10 cm',inStock:true,stockCount:89,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),tags:['guitar','kids instrument','music','acoustic']},
+  {id:'lc-003',name:'Remote Control Helicopter — Indoor',brand:'AeroKidz',category:'toys',subcategory:'RC Toys',gender:['boys','unisex'],ageGroup:'6–14 yrs',price:699,mrp:2999,discount:77,images:IMG.outdoor,description:'Easy-to-fly indoor RC helicopter with gyro stabilizer, 20-min flight time, LED lights, and USB charging.',features:['Gyro stabilizer auto-balance','20-min flight time','LED night lights','USB rechargeable','3.5-channel control'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'ABS plastic, lithium battery',ageRating:'6+',weight:'80g',dimensions:'25×15×10 cm',inStock:true,stockCount:178,rating:4.4,reviewCount:1000,reviews:genReviews(20,5),tags:['helicopter','RC','remote control','indoor']},
+  {id:'lc-004',name:'Drawing Tablet — Kids LCD Doodle Board',brand:'DoodleKid',category:'toys',subcategory:'Creative',gender:['boys','girls','unisex'],ageGroup:'3–12 yrs',price:399,mrp:1799,discount:78,images:IMG.stem,description:'Large 10" LCD doodle board. Draw, erase, repeat. No ink, no mess. Lock function to preserve drawings.',features:['10" LCD screen','One-button erase','Lock to preserve drawings','No batteries for drawing','Includes stylus'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'ABS plastic, LCD screen',ageRating:'3+',weight:'200g',dimensions:'25×18×0.5 cm',inStock:true,stockCount:345,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),isBestseller:true,tags:['doodle board','drawing tablet','LCD','kids art']},
+  {id:'lc-005',name:'Bubble Gun Machine — 5000 Bubbles/min',brand:'BubbleBlast',category:'toys',subcategory:'Outdoor',gender:['boys','girls','unisex'],ageGroup:'3+ yrs',price:349,mrp:1499,discount:77,images:IMG.outdoor,description:'Electric bubble machine gun shooting 5000 bubbles per minute! Includes 2 bottles of bubble solution.',features:['5000 bubbles per minute','LED light effects','2 bubble solution bottles','USB or battery powered','Wand shape, easy grip'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'ABS plastic',ageRating:'3+',weight:'300g',dimensions:'25×8×6 cm',inStock:true,stockCount:456,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),isBestseller:true,tags:['bubble gun','bubbles','outdoor','fun']},
+  {id:'lc-006',name:'Kids Camera — 1080p Digital Camera',brand:'SnapKidz',category:'toys',subcategory:'Creative',gender:['boys','girls','unisex'],ageGroup:'3–12 yrs',price:899,mrp:3999,discount:78,images:IMG.stem,description:'Real 1080p HD camera for kids with dual-lens, 2" screen, 8 selfie filters, 32GB SD card, and games!',features:['1080p HD front & back cameras','8 selfie filters + frames','2" IPS screen','32GB SD card included','Built-in mini games'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'ABS plastic, glass lens',ageRating:'3+',weight:'180g',dimensions:'12×8×4 cm',inStock:true,stockCount:234,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),isNew:true,tags:['kids camera','digital camera','photography','creative']},
+  {id:'lc-007',name:'Slime Making Kit — 20 Colors DIY',brand:'SlimeLab',category:'toys',subcategory:'Creative',gender:['boys','girls','unisex'],ageGroup:'5–14 yrs',price:599,mrp:2499,discount:76,images:IMG.stem,description:'Make 20 types of slime! Includes glue, activators, glitter, foam beads, and full instruction booklet. Safe.',features:['20 slime recipes included','Glitter, foam beads, confetti','Non-toxic, borax-free','Full instruction booklet','Storage containers'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'Non-toxic chemical kit',ageRating:'5+',weight:'600g',dimensions:'30×22×8 cm',inStock:true,stockCount:312,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),tags:['slime kit','DIY slime','craft kit','creative']},
+  {id:'lc-008',name:'Dart Board Game — Kids Magnetic',brand:'AimPro',category:'toys',subcategory:'Sports',gender:['boys','girls','unisex'],ageGroup:'3+ yrs',price:549,mrp:2299,discount:76,images:IMG.outdoor,description:'Safe magnetic dartboard with 6 magnetic darts, score tracking, and wall mount. No sharp points!',features:['Magnetic darts, no sharp tips','18" board with scoring zones','6 magnetic darts','Wall mount hardware','Keeps score display'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'ABS plastic, magnetic fabric',ageRating:'3+',weight:'400g',dimensions:'46×46×3 cm',inStock:true,stockCount:189,rating:4.4,reviewCount:1000,reviews:genReviews(20,5),tags:['dartboard','magnetic','kids game','family']},
+  {id:'lc-009',name:'Nerf-Style Foam Blaster — 12-Shot',brand:'FoamStrike',category:'toys',subcategory:'Action',gender:['boys','unisex'],ageGroup:'6+ yrs',price:699,mrp:2999,discount:77,images:IMG.outdoor,description:'12-shot foam dart blaster with rotating barrel, rapid fire mode, and 24 foam darts. Up to 15m range!',features:['12-dart rotating barrel','24 foam darts included','15-metre range','Rapid fire mode','Jam-resistant design'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'ABS plastic, foam darts',ageRating:'6+',weight:'450g',dimensions:'45×20×10 cm',inStock:true,stockCount:267,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),tags:['nerf blaster','foam dart','action toy','boys']},
+  {id:'lc-010',name:'Sand Art Kit — Kinetic Sand 5kg',brand:'SandMagic',category:'toys',subcategory:'Creative',gender:['boys','girls','unisex'],ageGroup:'3+ yrs',price:899,mrp:3999,discount:78,images:IMG.outdoor,description:'5kg of naturally flowing kinetic sand. Mould, squish, and sculpt. Never dries out. 15 moulds included.',features:['5 kg kinetic sand','Never dries out formula','15 animal & shape moulds','Non-toxic, allergen-free','Reusable sandbox'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'Natural sand + polymer binder',ageRating:'3+',weight:'5.5 kg',dimensions:'40×30×15 cm',inStock:true,stockCount:145,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),tags:['kinetic sand','sand art','sensory play','creative']},
+
+  // ──────────────────────── BOARD / CARD GAMES ────────────────────────
+  {id:'bg-001',name:'UNO Card Game — Family Pack 2-10 Players',brand:'Mattel',category:'collectibles',subcategory:'Board Games',gender:['boys','girls','adults','unisex'],ageGroup:'7+ yrs',price:299,mrp:999,discount:70,images:IMG.collectible,description:'The classic UNO card game family pack with 108 cards. Hours of fun for 2–10 players!',features:['108 cards, 2–10 players','Classic UNO rules','Family pack edition','Travel-friendly'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'Premium card stock',ageRating:'7+',weight:'200g',dimensions:'14×9×3 cm',inStock:true,stockCount:678,rating:4.8,reviewCount:1000,reviews:genReviews(20,5),isBestseller:true,tags:['UNO','card game','family game','board game']},
+  {id:'bg-002',name:'Chess Set — Magnetic Travel Board',brand:'ChessMate',category:'collectibles',subcategory:'Board Games',gender:['boys','girls','adults','unisex'],ageGroup:'6+ yrs',price:499,mrp:1999,discount:75,images:IMG.collectible,description:'Magnetic travel chess set with foldable board, storage inside, weighted pieces. Play anywhere!',features:['Magnetic pieces','Foldable board with storage','Weighted premium pieces','Travel-friendly'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'China',material:'ABS plastic, magnetic',ageRating:'6+',weight:'350g',dimensions:'25×25×2 cm',inStock:true,stockCount:345,rating:4.7,reviewCount:1000,reviews:genReviews(20,5),tags:['chess','board game','magnetic','travel']},
+  {id:'bg-003',name:'Scrabble — Premium Hindi+English Edition',brand:'Hasbro',category:'collectibles',subcategory:'Board Games',gender:['boys','girls','adults','unisex'],ageGroup:'8+ yrs',price:799,mrp:2999,discount:73,images:IMG.collectible,description:'Premium bilingual Scrabble with 300 tiles in Hindi and English. Deluxe rotating board. 2–4 players.',features:['Hindi + English tiles','Rotating deluxe board','2–4 players','Premium tile bag'],manufacturer:MFR_NOIDA.m,manufacturerAddress:MFR_NOIDA.a,countryOfOrigin:'India',material:'ABS plastic, wood tiles',ageRating:'8+',weight:'800g',dimensions:'35×35×5 cm',inStock:true,stockCount:189,rating:4.6,reviewCount:1000,reviews:genReviews(20,5),tags:['scrabble','hindi','word game','family']},
+
+  // ──────────────────────── ADULT GAMES ────────────────────────
+  {id:'ag-001',name:'Couples Truth or Dare — Adult Edition',brand:'FunNight',category:'sex',subcategory:'Adult Games',gender:['adults','men','women'],ageGroup:'18+ yrs',price:399,mrp:1499,discount:73,images:IMG.sex,description:'150 naughty truth or dare cards for couples. Spice up date nights! Discreet packaging.',features:['150 cards — truth & dare','3 heat levels: mild, spicy, wild','Compact card box','Discreet packaging'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'India',material:'Premium card stock',ageRating:'18+',weight:'150g',dimensions:'10×7×3 cm',inStock:true,stockCount:456,rating:4.5,reviewCount:1000,reviews:genReviews(20,5),badge:'18+ FUN',tags:['couples game','truth or dare','adult game','date night']},
+  {id:'ag-002',name:'Dice Party Game — Adults Only',brand:'FunNight',category:'sex',subcategory:'Adult Games',gender:['adults','men','women'],ageGroup:'18+ yrs',price:299,mrp:999,discount:70,images:IMG.sex,description:'Naughty dice party game for adults. 6 dice with actions, body parts, and positions. For couples & groups.',features:['6 specialty dice','Action + location + intensity','For 2+ players','Travel pouch included'],manufacturer:MFR_BLOOM.m,manufacturerAddress:MFR_BLOOM.a,countryOfOrigin:'India',material:'Premium resin dice',ageRating:'18+',weight:'100g',dimensions:'10×8×4 cm',inStock:true,stockCount:567,rating:4.3,reviewCount:1000,reviews:genReviews(20,4),badge:'18+ PARTY',tags:['dice game','adult party game','naughty game']},
 ];
 
 export const CATEGORIES = [
-  { id: 'toys', name: 'Kids Toys', icon: '🧸', color: 'from-yellow-400 to-orange-400', description: 'Hot Wheels, Plush, Dolls & More' },
-  { id: 'vehicles', name: 'Ride-On & Cars', icon: '🚗', color: 'from-blue-400 to-cyan-400', description: 'Electric Cars, Scooters & Bikes' },
-  { id: 'plush', name: 'Plush & Teddies', icon: '🐻', color: 'from-pink-400 to-rose-400', description: 'Unicorns, Teddies & Plushies' },
-  { id: 'dolls', name: 'Dolls & Fashion', icon: '👗', color: 'from-purple-400 to-pink-400', description: 'Fashion Dolls & Accessories' },
-  { id: 'stem', name: 'STEM & Science', icon: '🤖', color: 'from-green-400 to-teal-400', description: 'Robotics, Coding & Science Kits' },
-  { id: 'outdoor', name: 'Outdoor Play', icon: '🛴', color: 'from-orange-400 to-red-400', description: 'Scooters, Sports & Adventure' },
-  { id: 'kitchen', name: 'Play Kitchen', icon: '👨‍🍳', color: 'from-amber-400 to-yellow-400', description: 'Kitchen Sets & Role Play' },
-  { id: 'houses', name: 'Dollhouses', icon: '🏠', color: 'from-indigo-400 to-purple-400', description: 'Dream Mansions & Playhouses' },
-  { id: 'collectibles', name: 'Collectibles', icon: '🎮', color: 'from-violet-400 to-indigo-400', description: 'Blind Boxes & Anime Figures' },
-  { id: 'wellness', name: 'Adult Wellness', icon: '💆', color: 'from-rose-400 to-pink-400', description: '18+ Products — Adults Only' },
+  {id:'vehicles',name:'Cars & Ride-Ons',icon:'🚗',color:'from-blue-400 to-cyan-400',description:'Hot Wheels, Electric Cars, Scooters'},
+  {id:'plush',name:'Plush & Teddies',icon:'🐻',color:'from-pink-400 to-rose-400',description:'Unicorns, Teddies & Plushies'},
+  {id:'dolls',name:'Dolls & Fashion',icon:'👗',color:'from-purple-400 to-pink-400',description:'Fashion Dolls & Accessories'},
+  {id:'stem',name:'STEM & Science',icon:'🤖',color:'from-green-400 to-teal-400',description:'Robotics, Coding & Science Kits'},
+  {id:'outdoor',name:'Outdoor Play',icon:'🛴',color:'from-orange-400 to-red-400',description:'Scooters, Sports & Adventure'},
+  {id:'kitchen',name:'Play Kitchen',icon:'👨‍🍳',color:'from-amber-400 to-yellow-400',description:'Kitchen Sets & Role Play'},
+  {id:'houses',name:'Dollhouses',icon:'🏠',color:'from-indigo-400 to-purple-400',description:'Dream Mansions & Playhouses'},
+  {id:'collectibles',name:'Games & Collectibles',icon:'🎮',color:'from-violet-400 to-indigo-400',description:'Board Games, Cards & Figures'},
+  {id:'toys',name:'Creative & Fun',icon:'🎨',color:'from-yellow-400 to-orange-400',description:'Craft, Slime, RC & More'},
+  {id:'wellness',name:'Health & Beauty',icon:'💆',color:'from-teal-400 to-green-400',description:'Supplements, Skincare, Wellness'},
+  {id:'sex',name:'Adult Pleasure 🔞',icon:'🔞',color:'from-rose-500 to-pink-600',description:'Sexual Wellness — Adults 18+ Only'},
 ];
 
 export const GENDER_FILTERS = [
-  { id: 'boys', label: 'Boys', icon: '👦', color: 'bg-blue-100 text-blue-700 border-blue-300' },
-  { id: 'girls', label: 'Girls', icon: '👧', color: 'bg-pink-100 text-pink-700 border-pink-300' },
-  { id: 'men', label: 'Men', icon: '👨', color: 'bg-indigo-100 text-indigo-700 border-indigo-300' },
-  { id: 'women', label: 'Women', icon: '👩', color: 'bg-rose-100 text-rose-700 border-rose-300' },
-  { id: 'adults', label: 'Adults 18+', icon: '🔞', color: 'bg-red-100 text-red-700 border-red-300' },
-  { id: 'unisex', label: 'Unisex', icon: '🌈', color: 'bg-purple-100 text-purple-700 border-purple-300' },
-  { id: 'gay', label: 'LGBTQ+', icon: '🏳️‍🌈', color: 'bg-gradient-to-r from-pink-100 to-purple-100 text-purple-700 border-purple-300' },
-  { id: 'trans', label: 'Trans & Non-Binary', icon: '⚧️', color: 'bg-cyan-100 text-cyan-700 border-cyan-300' },
+  {id:'boys',label:'Boys',icon:'👦',color:'bg-blue-50 text-blue-700 border-blue-200'},
+  {id:'girls',label:'Girls',icon:'👧',color:'bg-pink-50 text-pink-700 border-pink-200'},
+  {id:'men',label:'Men',icon:'👨',color:'bg-indigo-50 text-indigo-700 border-indigo-200'},
+  {id:'women',label:'Women',icon:'👩',color:'bg-rose-50 text-rose-700 border-rose-200'},
+  {id:'adults',label:'Adults 18+',icon:'🔞',color:'bg-red-50 text-red-700 border-red-200'},
+  {id:'unisex',label:'Unisex',icon:'🌈',color:'bg-purple-50 text-purple-700 border-purple-200'},
+  {id:'gay',label:'LGBTQ+',icon:'🏳️‍🌈',color:'bg-gradient-to-r from-pink-50 to-purple-50 text-purple-700 border-purple-200'},
+  {id:'trans',label:'Trans & Non-Binary',icon:'⚧️',color:'bg-cyan-50 text-cyan-700 border-cyan-200'},
 ];
 
 export const RECENT_ORDERS = [
-  { name: 'Priya S.', city: 'Delhi', product: 'Hot Wheels 50-Car Pack', time: '2 mins ago' },
-  { name: 'Rahul G.', city: 'Mumbai', product: 'Giant Unicorn Plush', time: '5 mins ago' },
-  { name: 'Ananya K.', city: 'Bengaluru', product: 'Robotics Kit', time: '8 mins ago' },
-  { name: 'Vikram P.', city: 'Hyderabad', product: 'Electric Ride-On SUV', time: '11 mins ago' },
-  { name: 'Meera R.', city: 'Chennai', product: 'Dream Kitchen Set', time: '14 mins ago' },
-  { name: 'Arjun T.', city: 'Pune', product: 'Anime Blind Box', time: '17 mins ago' },
-  { name: 'Kavya M.', city: 'Kolkata', product: 'Fashion Doll Set', time: '21 mins ago' },
-  { name: 'Rohan B.', city: 'Jaipur', product: 'LED Scooter', time: '25 mins ago' },
-  { name: 'Sneha V.', city: 'Ahmedabad', product: 'Dreamy Dollhouse', time: '29 mins ago' },
-  { name: 'Aditya N.', city: 'Noida', product: 'Teddy Bear 60cm', time: '33 mins ago' },
+  {name:'Priya S.',city:'Delhi',product:'Hot Wheels 50-Car Pack',time:'2 mins ago'},
+  {name:'Rahul G.',city:'Mumbai',product:'Giant Unicorn Plush',time:'5 mins ago'},
+  {name:'Ananya K.',city:'Bengaluru',product:'Robotics Kit',time:'8 mins ago'},
+  {name:'Vikram P.',city:'Hyderabad',product:'Electric Ride-On SUV',time:'11 mins ago'},
+  {name:'Meera R.',city:'Chennai',product:'Dream Kitchen Set',time:'14 mins ago'},
+  {name:'Arjun T.',city:'Pune',product:'Anime Blind Box',time:'17 mins ago'},
+  {name:'Kavya M.',city:'Kolkata',product:'Personal Vibrator',time:'21 mins ago'},
+  {name:'Rohan B.',city:'Jaipur',product:'LED Scooter',time:'25 mins ago'},
+  {name:'Sneha V.',city:'Ahmedabad',product:'Dreamy Dollhouse',time:'29 mins ago'},
+  {name:'Aditya N.',city:'Noida',product:'Couples Play Box',time:'33 mins ago'},
 ];

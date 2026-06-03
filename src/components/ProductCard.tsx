@@ -29,7 +29,7 @@ export default function ProductCard({ product }: { product: Product }) {
       <div className="product-card group cursor-pointer" style={{background:'#fff'}}>
 
         {/* ── Image ── */}
-        <div className="relative overflow-hidden" style={{height:220,background:'#f7f4f0'}}>
+        <div className="relative overflow-hidden" style={{aspectRatio:'1/1',background:'#f7f4f0'}}>
           <Image
             src={product.images[0]}
             alt={product.name}
@@ -89,7 +89,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* ── Info ── */}
-        <div className="p-3.5">
+        <div className="p-2.5 sm:p-3.5">
           {/* Brand */}
           <p className="text-[10px] font-black tracking-widest uppercase mb-1"
             style={{color:'#FF6B00'}}>

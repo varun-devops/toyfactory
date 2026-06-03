@@ -236,3 +236,32 @@ body { font-family: var(--font-nunito); background: #fff; color: #111; }
 /* ── No border anywhere by default ── */
 button { border: none; cursor: pointer; }
 a { text-decoration: none; }
+
+/* ── Responsive section padding ── */
+.section-pad {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+@media (min-width: 640px) {
+  .section-pad { padding-left: 24px; padding-right: 24px; }
+}
+@media (min-width: 1024px) {
+  .section-pad { padding-left: 32px; padding-right: 32px; }
+}
+
+/* ── Product grid gap fix for small screens ── */
+@media (max-width: 480px) {
+  .product-card .p-3\.5 { padding: 10px; }
+}
+
+/* ── Prevent overflow on mobile ── */
+* { max-width: 100%; }
+img, video { max-width: 100%; height: auto; }
+
+/* ── Fix for aspect-ratio image container ── */
+.product-card [style*="aspectRatio"] img,
+.product-card [style*="aspect-ratio"] img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

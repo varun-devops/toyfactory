@@ -56,7 +56,7 @@ export default function Navbar() {
       transition:'box-shadow 0.3s',
     }}>
       {/* Main bar */}
-      <div style={{maxWidth:1280,margin:'0 auto',padding:'0 20px',display:'flex',alignItems:'center',height:64,gap:16}}>
+      <div style={{maxWidth:1280,margin:'0 auto',padding:'0 12px',display:'flex',alignItems:'center',height:60,gap:10}} className="sm:px-5 md:h-16 md:gap-4">
 
         {/* Logo */}
         <Link href="/" style={{display:'flex',alignItems:'center',gap:10,flexShrink:0,textDecoration:'none'}}>

@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'loremflickr.com' },
       { protocol: 'https', hostname: 'cdn.pixabay.com' },
       { protocol: 'https', hostname: 'fakestoreapi.com' },
+      { protocol: 'https', hostname: 'api.dicebear.com' },
     ],
   },
 };

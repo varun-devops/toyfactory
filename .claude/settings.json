@@ -3,7 +3,10 @@
     "allow": [
       "PowerShell(node --version)",
       "PowerShell(npm --version)",
-      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3001\" -UseBasicParsing)"
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3001\" -UseBasicParsing)",
+      "Bash(Get-ChildItem -Path \"d:\\\\websitem\\\\ToyFactory\" -Recurse -Depth 2)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Format-Table -AutoSize)"
     ],
     "additionalDirectories": [
       "d:\\websitem\\toyfactory\\src\\lib\\data",

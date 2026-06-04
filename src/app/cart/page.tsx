@@ -28,7 +28,7 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-6">
       <div className="max-w-6xl mx-auto px-4">
-        <h1 className="font-baloo text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+        <h1 className="font-baloo text-2xl sm:text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
           <ShoppingCart className="text-orange-500" /> My Cart <span className="text-orange-500">({cart.length} items)</span>
         </h1>
 
@@ -36,8 +36,8 @@ export default function CartPage() {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cart.map(item => (
-              <div key={item.product.id} className="bg-white rounded-2xl p-4 shadow-sm flex gap-4">
-                <Link href={`/products/${item.product.id}`} className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-gray-50">
+              <div key={item.product.id} className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm flex gap-3 sm:gap-4">
+                <Link href={`/products/${item.product.id}`} className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden flex-shrink-0 bg-gray-50">
                   <Image src={item.product.images[0]} alt={item.product.name} fill className="object-cover" sizes="96px" />
                 </Link>
                 <div className="flex-1 min-w-0">

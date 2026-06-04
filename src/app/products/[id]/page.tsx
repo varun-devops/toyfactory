@@ -108,9 +108,9 @@ export default function ProductPage() {
             {/* Price */}
             <div className="bg-orange-50 rounded-2xl p-4">
               <div className="flex items-baseline gap-3 mb-1">
-                <span className="text-4xl font-bold text-gray-900">₹{product.price.toLocaleString()}</span>
-                <span className="text-lg text-gray-400 line-through">₹{product.mrp.toLocaleString()}</span>
-                <span className="text-green-600 font-bold text-lg">{product.discount}% OFF</span>
+                <span className="text-3xl sm:text-4xl font-bold text-gray-900">₹{product.price.toLocaleString()}</span>
+                <span className="text-base sm:text-lg text-gray-400 line-through">₹{product.mrp.toLocaleString()}</span>
+                <span className="text-green-600 font-bold text-base sm:text-lg">{product.discount}% OFF</span>
               </div>
               <div className="text-green-700 font-semibold text-sm">You save ₹{(product.mrp - product.price).toLocaleString()} on this product!</div>
             </div>
@@ -137,15 +137,16 @@ export default function ProductPage() {
             {savings > 0 && <div className="text-green-600 text-sm font-semibold">You save ₹{savings.toLocaleString()} 🎉</div>}
 
             {/* CTAs */}
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <button onClick={handleAddToCart} className="flex-1 flex items-center justify-center gap-2 bg-orange-500 text-white py-3.5 rounded-2xl font-bold text-base hover:bg-orange-600 transition-colors active:scale-95">
                 <ShoppingCart size={18} /> Add to Cart
               </button>
               <button onClick={handleBuyNow} className="flex-1 bg-gradient-to-r from-orange-500 to-pink-500 text-white py-3.5 rounded-2xl font-bold text-base hover:opacity-90 transition-opacity active:scale-95">
                 ⚡ Buy Now
               </button>
-              <button onClick={() => { toggleFavorite(product.id); toast.success(isFav ? 'Removed' : '❤️ Saved!'); }} className={`w-14 flex items-center justify-center rounded-2xl border-2 ${isFav ? 'border-pink-400 bg-pink-50' : 'border-gray-200 bg-white'} transition-colors`}>
+              <button onClick={() => { toggleFavorite(product.id); toast.success(isFav ? 'Removed' : '❤️ Saved!'); }} className={`sm:w-14 flex items-center justify-center gap-2 sm:gap-0 py-3 sm:py-0 rounded-2xl border-2 ${isFav ? 'border-pink-400 bg-pink-50' : 'border-gray-200 bg-white'} transition-colors`}>
                 <Heart size={20} className={isFav ? 'fill-pink-500 text-pink-500' : 'text-gray-400'} />
+                <span className="sm:hidden font-bold text-sm text-gray-600">{isFav ? 'Saved' : 'Save'}</span>
               </button>
             </div>
 
@@ -171,10 +172,10 @@ export default function ProductPage() {
 
         {/* Tabs */}
         <div className="mt-10">
-          <div className="flex border-b border-gray-200 mb-6 gap-1">
+          <div className="flex border-b border-gray-200 mb-6 gap-1 overflow-x-auto">
             {(['desc', 'reviews', 'specs'] as const).map(tab => (
-              <button key={tab} onClick={() => setActiveTab(tab)} className={`px-6 py-3 font-semibold text-sm rounded-t-xl transition-colors capitalize ${activeTab === tab ? 'bg-orange-500 text-white' : 'text-gray-600 hover:text-orange-500'}`}>
-                {tab === 'desc' ? '📋 Description' : tab === 'reviews' ? `⭐ Reviews (${product.reviewCount.toLocaleString()})` : '📦 Specifications'}
+              <button key={tab} onClick={() => setActiveTab(tab)} className={`px-3 sm:px-6 py-3 font-semibold text-xs sm:text-sm rounded-t-xl transition-colors capitalize whitespace-nowrap flex-shrink-0 ${activeTab === tab ? 'bg-orange-500 text-white' : 'text-gray-600 hover:text-orange-500'}`}>
+                {tab === 'desc' ? '📋 Description' : tab === 'reviews' ? `⭐ Reviews (${product.reviewCount.toLocaleString()})` : '📦 Specs'}
               </button>
             ))}
           </div>
@@ -258,7 +259,7 @@ export default function ProductPage() {
                 ['Manufacturer', product.manufacturer],
                 ['Manufacturer Address', product.manufacturerAddress],
               ].map(([key, val], i) => (
-                <div key={key} className={`grid grid-cols-2 py-3 px-5 ${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
+                <div key={key} className={`grid grid-cols-2 py-3 px-4 sm:px-5 gap-2 ${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
                   <span className="text-sm font-semibold text-gray-700">{key}</span>
                   <span className="text-sm text-gray-600">{val}</span>
                 </div>

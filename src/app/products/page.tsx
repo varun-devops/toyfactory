@@ -61,17 +61,17 @@ function ProductsContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-pink-500 py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="font-baloo text-3xl font-bold text-white">{title}</h1>
-          <p className="text-white/80 mt-1">{filtered.length} products found</p>
+      <div className="bg-gradient-to-r from-orange-500 to-pink-500 py-6 sm:py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <h1 className="font-baloo text-2xl sm:text-3xl font-bold text-white">{title}</h1>
+          <p className="text-white/80 mt-1 text-sm">{filtered.length} products found</p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Mobile filter button & sort */}
         <div className="flex items-center justify-between gap-3 mb-4">
-          <button onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-semibold shadow-sm md:hidden">
+          <button onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3 sm:px-4 py-2 text-sm font-semibold shadow-sm md:hidden">
             <SlidersHorizontal size={16} /> Filters
             {(selectedGenders.length + selectedCategories.length) > 0 && (
               <span className="bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{selectedGenders.length + selectedCategories.length}</span>
@@ -79,7 +79,7 @@ function ProductsContent() {
           </button>
           <div className="flex items-center gap-2 ml-auto">
             <span className="text-sm text-gray-600 hidden sm:block">Sort:</span>
-            <select value={sort} onChange={e => setSort(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white shadow-sm focus:outline-none focus:border-orange-400">
+            <select value={sort} onChange={e => setSort(e.target.value)} className="border border-gray-200 rounded-xl px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-white shadow-sm focus:outline-none focus:border-orange-400">
               <option value="featured">Featured</option>
               <option value="bestseller">Bestsellers</option>
               <option value="price-asc">Price: Low to High</option>
@@ -90,9 +90,9 @@ function ProductsContent() {
           </div>
         </div>
 
-        <div className="flex gap-6">
-          {/* Sidebar Filters */}
-          <aside className={`${showFilters ? 'fixed inset-0 z-50 bg-white overflow-y-auto p-4' : 'hidden'} md:block md:relative md:z-auto md:bg-transparent md:p-0 md:w-64 flex-shrink-0`}>
+        <div className="flex gap-4 lg:gap-6">
+          {/* Sidebar Filters — desktop always visible, mobile slides over as overlay */}
+          <aside className={`${showFilters ? 'fixed inset-0 z-50 bg-white overflow-y-auto p-4' : 'hidden'} md:block md:static md:z-auto md:bg-transparent md:p-0 md:w-56 lg:w-64 flex-shrink-0`}>
             {showFilters && (
               <div className="flex items-center justify-between mb-4 md:hidden">
                 <h3 className="font-bold text-lg">Filters</h3>
@@ -157,16 +157,16 @@ function ProductsContent() {
           </aside>
 
           {/* Products Grid */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             {filtered.length === 0 ? (
-              <div className="text-center py-20">
-                <div className="text-6xl mb-4">🧸</div>
-                <h3 className="font-baloo text-2xl font-bold text-gray-600">No products found</h3>
-                <p className="text-gray-400 mt-2">Try adjusting your filters</p>
-                <button onClick={clearAll} className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-full font-bold hover:bg-orange-600">Clear Filters</button>
+              <div className="text-center py-16 sm:py-20">
+                <div className="text-5xl sm:text-6xl mb-4">🧸</div>
+                <h3 className="font-baloo text-xl sm:text-2xl font-bold text-gray-600">No products found</h3>
+                <p className="text-gray-400 mt-2 text-sm">Try adjusting your filters</p>
+                <button onClick={clearAll} className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-full font-bold hover:bg-orange-600 text-sm">Clear Filters</button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                 {filtered.map(p => <ProductCard key={p.id} product={p} />)}
               </div>
             )}

@@ -46,8 +46,8 @@ export default function ProductPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100 py-3">
-        <div className="max-w-7xl mx-auto px-4 flex items-center gap-1 text-sm text-gray-500">
+      <div className="bg-white border-b border-gray-100 py-2 sm:py-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-1 text-xs sm:text-sm text-gray-500 overflow-x-auto whitespace-nowrap">
           <Link href="/" className="hover:text-orange-500">Home</Link>
           <ChevronRight size={14} />
           <Link href="/products" className="hover:text-orange-500">Products</Link>
@@ -68,8 +68,8 @@ export default function ProductPage() {
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-2 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+        <div className="grid lg:grid-cols-2 gap-5 sm:gap-8">
           {/* Images */}
           <div className="space-y-3">
             <div className="relative rounded-2xl overflow-hidden bg-white shadow-sm aspect-square">

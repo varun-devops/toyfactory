@@ -6,7 +6,10 @@
       "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3001\" -UseBasicParsing)",
       "Bash(Get-ChildItem -Path \"d:\\\\websitem\\\\ToyFactory\" -Recurse -Depth 2)",
       "Bash(Select-Object FullName, PSIsContainer)",
-      "Bash(Format-Table -AutoSize)"
+      "Bash(Format-Table -AutoSize)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(npx playwright *)",
+      "Bash(Remove-Item \"D:\\\\websitem\\\\ToyFactory\\\\*.png\" -Force)"
     ],
     "additionalDirectories": [
       "d:\\websitem\\toyfactory\\src\\lib\\data",

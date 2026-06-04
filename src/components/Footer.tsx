@@ -6,12 +6,12 @@ export default function Footer() {
       {/* Korea Tour Banner */}
       <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 py-6">
         <div className="max-w-7xl mx-auto px-4 text-center text-white">
-          <div className="text-2xl font-baloo font-bold mb-1">🎉 WIN A KOREA TOUR PACKAGE! ✈️🇰🇷</div>
+          <div className="text-2xl font-baloo font-bold mb-1">🎉 WIN A KOREA TOUR PACKAGE! ✈️</div>
           <div className="text-base opacity-90">Buy products worth ₹10,000 or more and get a chance to win an all-expenses-paid Korea Tour!</div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
         {/* Brand */}
         <div className="col-span-2 md:col-span-1">
           <div className="flex items-center gap-2 mb-4">
@@ -81,8 +81,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-gray-800 py-6">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-gray-500">
+      <div className="border-t border-gray-800 py-5 sm:py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center gap-3 text-xs sm:text-sm text-gray-500">
           <div>© 2024 ToyFactory India Pvt. Ltd. All Rights Reserved. CIN: U52100UP2024PTC123456</div>
           <div className="flex gap-4">
             <Link href="/privacy" className="hover:text-orange-400">Privacy</Link>

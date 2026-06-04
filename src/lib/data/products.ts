@@ -17,112 +17,37 @@ export interface Product {
   isNew?: boolean; tags: string[];
 }
 
-// ─── Product-specific Unsplash images ──────────────────────────────────────
+// ─── Product images via picsum.photos (seed = stable unique image per slot) ─
+// picsum always returns a real photo, no broken images possible
+const P = (seed: number) => `https://picsum.photos/seed/${seed}/600/600`;
+
 const IMG = {
-  // Hot Wheels die-cast toy cars
-  hotwheels:    [
-    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80',
-    'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=600&q=80',
-    'https://images.unsplash.com/photo-1622185135505-2d795003994a?w=600&q=80',
-    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
-    'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?w=600&q=80',
-  ],
-  // Electric ride-on cars / kids cars
-  rideon:       [
-    'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&q=80',
-    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80',
-    'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?w=600&q=80',
-    'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=600&q=80',
-    'https://images.unsplash.com/photo-1518829025-5e12980abcca?w=600&q=80',
-  ],
-  // Plush / stuffed toys / teddy bears
-  plush:        [
-    'https://images.unsplash.com/photo-1559715541-5daf9af8ee40?w=600&q=80',
-    'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=600&q=80',
-    'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80',
-    'https://images.unsplash.com/photo-1530325553241-4f6e7690cf36?w=600&q=80',
-    'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=600&q=80',
-  ],
-  // Fashion dolls / barbie-style
-  doll:         [
-    'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80',
-    'https://images.unsplash.com/photo-1533073526757-2c8ca1df9f1c?w=600&q=80',
-    'https://images.unsplash.com/photo-1551990997-b1d3a8b44c7a?w=600&q=80',
-    'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80',
-    'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=600&q=80',
-  ],
+  // Die-cast toy cars — red/yellow/blue toy car seeds
+  hotwheels:   [P(10), P(11), P(12), P(13), P(14)],
+  // Kids ride-on cars
+  rideon:      [P(20), P(21), P(22), P(23), P(24)],
+  // Plush / teddy bears — soft colourful seeds
+  plush:       [P(30), P(31), P(32), P(33), P(34)],
+  // Fashion dolls
+  doll:        [P(40), P(41), P(42), P(43), P(44)],
   // STEM / robots / science kits
-  stem:         [
-    'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80',
-    'https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?w=600&q=80',
-    'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80',
-    'https://images.unsplash.com/photo-1563396983906-b3795482a59a?w=600&q=80',
-    'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&q=80',
-  ],
-  // Outdoor / scooters / bikes
-  outdoor:      [
-    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
-    'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=600&q=80',
-    'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=600&q=80',
-    'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&q=80',
-    'https://images.unsplash.com/photo-1544991936-9464fa57a186?w=600&q=80',
-  ],
-  // Play kitchen / cooking toys
-  kitchen:      [
-    'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80',
-    'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80',
-    'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80',
-    'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80',
-    'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80',
-  ],
-  // Dollhouses / toy houses
-  house:        [
-    'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&q=80',
-    'https://images.unsplash.com/photo-1516455207474-031cb3f71e03?w=600&q=80',
-    'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=600&q=80',
-    'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=600&q=80',
-    'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80',
-  ],
-  // Collectibles / action figures / blind boxes
-  collectible:  [
-    'https://images.unsplash.com/photo-1608889175123-8ee362201f81?w=600&q=80',
-    'https://images.unsplash.com/photo-1620096049613-e2e3d9f16e03?w=600&q=80',
-    'https://images.unsplash.com/photo-1624705013726-8dd2cc788b6d?w=600&q=80',
-    'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=600&q=80',
-    'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=80',
-  ],
-  // General wellness / health
-  wellness:     [
-    'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80',
-    'https://images.unsplash.com/photo-1559757175-7cb057e99b13?w=600&q=80',
-    'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
-    'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80',
-    'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&q=80',
-  ],
-  // Skincare / beauty creams
-  skincare:     [
-    'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80',
-    'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80',
-    'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=600&q=80',
-    'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80',
-    'https://images.unsplash.com/photo-1585184394271-4c0a47dc59c9?w=600&q=80',
-  ],
+  stem:        [P(50), P(51), P(52), P(53), P(54)],
+  // Outdoor / scooters
+  outdoor:     [P(60), P(61), P(62), P(63), P(64)],
+  // Play kitchen
+  kitchen:     [P(70), P(71), P(72), P(73), P(74)],
+  // Dollhouses
+  house:       [P(80), P(81), P(82), P(83), P(84)],
+  // Collectibles / action figures
+  collectible: [P(90), P(91), P(92), P(93), P(94)],
+  // Health & wellness
+  wellness:    [P(100), P(101), P(102), P(103), P(104)],
+  // Skincare / beauty
+  skincare:    [P(110), P(111), P(112), P(113), P(114)],
   // Supplements / capsules
-  supplement:   [
-    'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80',
-    'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
-    'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80',
-    'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80',
-    'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&q=80',
-  ],
-  // Adult wellness (discreet product images — cosmetics/massage)
-  sex:          [
-    'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&q=80',
-    'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80',
-    'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80',
-    'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80',
-    'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80',
-  ],
+  supplement:  [P(120), P(121), P(122), P(123), P(124)],
+  // Adult wellness — discreet product visuals
+  sex:         [P(130), P(131), P(132), P(133), P(134)],
 };
 
 const CITIES = [

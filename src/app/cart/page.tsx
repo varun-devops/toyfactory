@@ -7,18 +7,18 @@ import toast from 'react-hot-toast';
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQty, cartTotal } = useStore();
-  const total = cartTotal();
-  const shipping = total >= 499 ? 0 : 49;
+  const total      = cartTotal();
+  const shipping   = total >= 499 ? 0 : 49;
   const grandTotal = total + shipping;
-  const savings = cart.reduce((s, i) => s + (i.product.mrp - i.product.price) * i.quantity, 0);
+  const savings    = cart.reduce((s, i) => s + (i.product.mrp - i.product.price) * i.quantity, 0);
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-        <div className="text-7xl mb-4 animate-float">🛒</div>
-        <h2 className="font-baloo text-3xl font-bold text-gray-700 mb-2">Your cart is empty!</h2>
-        <p className="text-gray-500 mb-6">Add some amazing toys to your cart</p>
-        <Link href="/products" className="bg-orange-500 text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-colors">
+      <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#f9f9f9', padding: 32, gap: 16, textAlign: 'center' }}>
+        <div style={{ fontSize: 72 }} className="animate-float">🛒</div>
+        <h2 className="font-baloo" style={{ fontSize: 28, fontWeight: 800, color: '#333' }}>Your cart is empty!</h2>
+        <p style={{ color: '#888', fontSize: 15 }}>Add some amazing toys to your cart</p>
+        <Link href="/products" className="btn btn-primary" style={{ marginTop: 8 }}>
           🧸 Browse Products
         </Link>
       </div>
@@ -26,41 +26,73 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6">
-      <div className="max-w-6xl mx-auto px-4">
-        <h1 className="font-baloo text-2xl sm:text-3xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-          <ShoppingCart className="text-orange-500" /> My Cart <span className="text-orange-500">({cart.length} items)</span>
+    <div style={{ minHeight: '100vh', background: '#f4f4f4' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 20px' }}>
+
+        <h1 className="font-baloo" style={{ fontSize: 'clamp(1.5rem,4vw,2rem)', fontWeight: 800, color: '#111', marginBottom: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <ShoppingCart size={26} color="#FF6B00" />
+          My Cart
+          <span style={{ color: '#FF6B00' }}>({cart.length} {cart.length === 1 ? 'item' : 'items'})</span>
         </h1>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Cart Items */}
-          <div className="lg:col-span-2 space-y-4">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 20 }} className="cart-layout">
+
+          {/* ── Cart items ── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {cart.map(item => (
-              <div key={item.product.id} className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm flex gap-3 sm:gap-4">
-                <Link href={`/products/${item.product.id}`} className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden flex-shrink-0 bg-gray-50">
-                  <Image src={item.product.images[0]} alt={item.product.name} fill className="object-cover" sizes="96px" />
+              <div key={item.product.id} style={{
+                background: '#fff', borderRadius: 18, padding: '16px 18px',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
+                display: 'flex', gap: 16, alignItems: 'flex-start',
+              }}>
+                {/* Image */}
+                <Link href={`/products/${item.product.id}`} style={{
+                  position: 'relative', width: 88, height: 88, borderRadius: 14,
+                  overflow: 'hidden', flexShrink: 0, background: '#f7f4f0', display: 'block',
+                }}>
+                  <Image src={item.product.images[0]} alt={item.product.name} fill className="object-cover" sizes="88px" />
                 </Link>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs text-orange-500 font-semibold">{item.product.brand}</div>
-                  <Link href={`/products/${item.product.id}`} className="font-bold text-gray-800 text-sm line-clamp-2 hover:text-orange-600">{item.product.name}</Link>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="text-lg font-bold text-gray-900">₹{item.product.price.toLocaleString()}</span>
-                    <span className="text-xs text-gray-400 line-through">₹{item.product.mrp.toLocaleString()}</span>
-                    <span className="text-xs text-green-600 font-bold">{item.product.discount}% OFF</span>
+
+                {/* Details */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 11, fontWeight: 800, color: '#FF6B00', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+                    {item.product.brand}
                   </div>
-                  <div className="flex items-center justify-between mt-3">
-                    <div className="flex items-center gap-2 bg-gray-100 rounded-xl p-1">
-                      <button onClick={() => { updateQty(item.product.id, item.quantity - 1); if (item.quantity === 1) toast.success('Removed from cart'); }} className="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center hover:bg-orange-50">
-                        <Minus size={12} />
+                  <Link href={`/products/${item.product.id}`} style={{ fontSize: 14, fontWeight: 700, color: '#111', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {item.product.name}
+                  </Link>
+
+                  {/* Price */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
+                    <span style={{ fontSize: 17, fontWeight: 900, color: '#111' }}>₹{item.product.price.toLocaleString()}</span>
+                    <span style={{ fontSize: 12, color: '#ccc', textDecoration: 'line-through' }}>₹{item.product.mrp.toLocaleString()}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: '#16a34a' }}>{item.product.discount}% OFF</span>
+                  </div>
+
+                  {/* Qty + Remove */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 0, background: '#f4f4f4', borderRadius: 12, padding: 3 }}>
+                      <button
+                        onClick={() => { updateQty(item.product.id, item.quantity - 1); if (item.quantity === 1) toast.success('Removed from cart'); }}
+                        style={{ width: 32, height: 32, borderRadius: 10, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', color: '#555', fontWeight: 700 }}
+                      >
+                        <Minus size={13} />
                       </button>
-                      <span className="w-8 text-center font-bold text-sm">{item.quantity}</span>
-                      <button onClick={() => updateQty(item.product.id, item.quantity + 1)} className="w-7 h-7 rounded-lg bg-white shadow-sm flex items-center justify-center hover:bg-orange-50">
-                        <Plus size={12} />
+                      <span style={{ width: 36, textAlign: 'center', fontWeight: 800, fontSize: 15 }}>{item.quantity}</span>
+                      <button
+                        onClick={() => updateQty(item.product.id, item.quantity + 1)}
+                        style={{ width: 32, height: 32, borderRadius: 10, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', color: '#555', fontWeight: 700 }}
+                      >
+                        <Plus size={13} />
                       </button>
                     </div>
-                    <div className="text-right">
-                      <div className="font-bold text-gray-900">₹{(item.product.price * item.quantity).toLocaleString()}</div>
-                      <button onClick={() => { removeFromCart(item.product.id); toast.success('Removed from cart'); }} className="flex items-center gap-1 text-xs text-red-500 hover:text-red-700 mt-1">
+
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontWeight: 800, fontSize: 15, color: '#111' }}>₹{(item.product.price * item.quantity).toLocaleString()}</div>
+                      <button
+                        onClick={() => { removeFromCart(item.product.id); toast.success('Removed from cart'); }}
+                        style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#ef4444', background: 'transparent', fontWeight: 600, marginTop: 4 }}
+                      >
                         <Trash2 size={12} /> Remove
                       </button>
                     </div>
@@ -70,56 +102,82 @@ export default function CartPage() {
             ))}
           </div>
 
-          {/* Order Summary */}
-          <div className="space-y-4">
-            <div className="bg-white rounded-2xl shadow-sm p-5">
-              <h3 className="font-baloo font-bold text-lg text-gray-800 mb-4">Order Summary</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-gray-600">Subtotal ({cart.reduce((s,i) => s + i.quantity, 0)} items)</span><span>₹{total.toLocaleString()}</span></div>
-                <div className="flex justify-between text-green-600 font-semibold"><span>Total Savings</span><span>-₹{savings.toLocaleString()}</span></div>
-                <div className="flex justify-between"><span className="text-gray-600">Shipping</span><span className={shipping === 0 ? 'text-green-600 font-semibold' : ''}>{shipping === 0 ? 'FREE 🎉' : `₹${shipping}`}</span></div>
-                {shipping > 0 && <div className="text-xs text-orange-600 bg-orange-50 rounded-lg p-2">Add ₹{(499 - total).toLocaleString()} more for FREE shipping!</div>}
+          {/* ── Order summary ── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+            <div style={{ background: '#fff', borderRadius: 20, padding: '20px 22px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <h3 className="font-baloo" style={{ fontSize: 18, fontWeight: 800, color: '#111', marginBottom: 18 }}>Order Summary</h3>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 14 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#666' }}>Subtotal ({cart.reduce((s, i) => s + i.quantity, 0)} items)</span>
+                  <span style={{ fontWeight: 700 }}>₹{total.toLocaleString()}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#16a34a' }}>
+                  <span style={{ fontWeight: 600 }}>Total Savings</span>
+                  <span style={{ fontWeight: 700 }}>−₹{savings.toLocaleString()}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#666' }}>Shipping</span>
+                  <span style={{ fontWeight: 700, color: shipping === 0 ? '#16a34a' : '#111' }}>
+                    {shipping === 0 ? 'FREE 🎉' : `₹${shipping}`}
+                  </span>
+                </div>
+                {shipping > 0 && (
+                  <div style={{ background: '#fff7ed', border: '1px solid #fed7aa', borderRadius: 10, padding: '8px 12px', fontSize: 12, color: '#c2410c' }}>
+                    Add ₹{(499 - total).toLocaleString()} more for FREE shipping!
+                  </div>
+                )}
               </div>
-              <div className="border-t border-gray-100 mt-3 pt-3 flex justify-between font-bold text-lg">
-                <span>Grand Total</span>
-                <span className="text-orange-600">₹{grandTotal.toLocaleString()}</span>
+
+              <div style={{ borderTop: '1px solid #f0f0f0', marginTop: 16, paddingTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontWeight: 800, fontSize: 16 }}>Grand Total</span>
+                <span style={{ fontWeight: 900, fontSize: 20, color: '#FF6B00' }}>₹{grandTotal.toLocaleString()}</span>
               </div>
-              {savings > 0 && <div className="bg-green-50 text-green-700 text-sm font-semibold text-center rounded-xl p-2 mt-3">🎉 You save ₹{savings.toLocaleString()} on this order!</div>}
-              <Link href="/checkout" className="block w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-3.5 rounded-2xl font-bold text-center mt-4 hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+
+              {savings > 0 && (
+                <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 12, padding: '10px 14px', textAlign: 'center', fontSize: 13, fontWeight: 700, color: '#16a34a', marginTop: 14 }}>
+                  🎉 You save ₹{savings.toLocaleString()} on this order!
+                </div>
+              )}
+
+              <Link href="/checkout" className="btn btn-primary" style={{ width: '100%', marginTop: 18, borderRadius: 16, padding: '15px 20px', fontSize: 15 }}>
                 Proceed to Checkout <ArrowRight size={16} />
               </Link>
-              <div className="text-center text-xs text-gray-400 mt-3 flex items-center justify-center gap-1">
+              <p style={{ textAlign: 'center', fontSize: 11, color: '#aaa', marginTop: 12 }}>
                 🔒 Secured by Razorpay • 100% Safe
-              </div>
+              </p>
             </div>
 
-            {/* Korea Promo */}
-            {total >= 10000 && (
-              <div className="bg-gradient-to-r from-purple-600 to-pink-500 rounded-2xl p-4 text-white text-center">
-                <div className="text-xl font-bold mb-1">✈️ You qualify for Korea Tour!</div>
-                <div className="text-sm opacity-90">Order above ₹10,000 — enter the lucky draw!</div>
+            {/* Korea draw */}
+            {total >= 10000 ? (
+              <div style={{ background: 'linear-gradient(120deg,#7c3aed,#ec4899)', borderRadius: 18, padding: '18px 20px', color: '#fff', textAlign: 'center' }}>
+                <div style={{ fontSize: 17, fontWeight: 800, marginBottom: 4 }}>✈️ You qualify for Korea Tour!</div>
+                <div style={{ fontSize: 13, opacity: 0.9 }}>Order above ₹10,000 — enter the lucky draw!</div>
               </div>
-            )}
-            {total < 10000 && (
-              <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 text-center">
-                <div className="text-purple-700 font-bold text-sm mb-1">✈️ Korea Tour Lucky Draw</div>
-                <div className="text-xs text-purple-600">Add ₹{(10000 - total).toLocaleString()} more to qualify!</div>
-                <Link href="/products" className="inline-block mt-2 text-xs bg-purple-600 text-white px-4 py-1.5 rounded-full font-semibold">Shop More</Link>
+            ) : (
+              <div style={{ background: '#faf5ff', border: '1px solid #e9d5ff', borderRadius: 18, padding: '16px 18px', textAlign: 'center' }}>
+                <div style={{ color: '#7c3aed', fontWeight: 800, fontSize: 14, marginBottom: 6 }}>✈️ Korea Tour Lucky Draw</div>
+                <div style={{ fontSize: 12, color: '#9333ea', marginBottom: 10 }}>Add ₹{(10000 - total).toLocaleString()} more to qualify!</div>
+                <Link href="/products" style={{ background: '#7c3aed', color: '#fff', fontSize: 12, fontWeight: 700, padding: '7px 18px', borderRadius: 99, display: 'inline-block' }}>
+                  Shop More
+                </Link>
               </div>
             )}
 
             {/* Payment icons */}
-            <div className="bg-white rounded-2xl p-4 shadow-sm">
-              <div className="text-xs text-gray-500 text-center mb-3 font-semibold">ACCEPTED PAYMENTS</div>
-              <div className="flex flex-wrap gap-2 justify-center">
+            <div style={{ background: '#fff', borderRadius: 18, padding: '16px 18px', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
+              <div style={{ fontSize: 11, color: '#aaa', textAlign: 'center', marginBottom: 12, fontWeight: 700, letterSpacing: '0.08em' }}>ACCEPTED PAYMENTS</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
                 {['💳 Visa', '💳 Mastercard', '📱 UPI', '🏦 NetBanking', '💰 COD', '📲 Paytm'].map(m => (
-                  <span key={m} className="text-xs bg-gray-100 px-2 py-1 rounded">{m}</span>
+                  <span key={m} style={{ background: '#f4f4f4', fontSize: 12, padding: '5px 12px', borderRadius: 8, color: '#555' }}>{m}</span>
                 ))}
               </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   );
 }

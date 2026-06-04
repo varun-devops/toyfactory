@@ -8,179 +8,218 @@ import { Suspense } from 'react';
 
 function ProductsContent() {
   const params = useSearchParams();
-  const [showFilters, setShowFilters] = useState(false);
-  const [priceMax, setPriceMax] = useState(50000);
-  const [selectedGenders, setSelectedGenders] = useState<string[]>(() => {
-    const g = params.get('gender');
-    return g ? [g] : [];
-  });
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
-    const c = params.get('category');
-    return c ? [c] : [];
-  });
-  const [sort, setSort] = useState('featured');
-  const [minRating, setMinRating] = useState(0);
+  const [showFilters, setShowFilters]         = useState(false);
+  const [priceMax, setPriceMax]               = useState(50000);
+  const [selectedGenders, setSelectedGenders] = useState<string[]>(() => { const g = params.get('gender'); return g ? [g] : []; });
+  const [selectedCats, setSelectedCats]       = useState<string[]>(() => { const c = params.get('category'); return c ? [c] : []; });
+  const [sort, setSort]                       = useState('featured');
+  const [minRating, setMinRating]             = useState(0);
 
-  const search = params.get('search') || '';
+  const search      = params.get('search') || '';
   const subcategory = params.get('subcategory') || '';
 
   const filtered = useMemo(() => {
     let items = [...PRODUCTS];
-
-    if (search) {
-      const q = search.toLowerCase();
-      items = items.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        p.brand.toLowerCase().includes(q) ||
-        p.tags.some(t => t.includes(q)) ||
-        p.subcategory.toLowerCase().includes(q)
-      );
-    }
+    if (search)      { const q = search.toLowerCase(); items = items.filter(p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || p.tags.some(t => t.includes(q)) || p.subcategory.toLowerCase().includes(q)); }
     if (subcategory) items = items.filter(p => p.subcategory === decodeURIComponent(subcategory));
-    if (selectedCategories.length) items = items.filter(p => selectedCategories.includes(p.category));
+    if (selectedCats.length)    items = items.filter(p => selectedCats.includes(p.category));
     if (selectedGenders.length) items = items.filter(p => p.gender.some(g => selectedGenders.includes(g)));
     items = items.filter(p => p.price <= priceMax);
     if (minRating) items = items.filter(p => p.rating >= minRating);
-
     switch (sort) {
-      case 'price-asc': return items.sort((a, b) => a.price - b.price);
+      case 'price-asc':  return items.sort((a, b) => a.price - b.price);
       case 'price-desc': return items.sort((a, b) => b.price - a.price);
-      case 'rating': return items.sort((a, b) => b.rating - a.rating);
-      case 'discount': return items.sort((a, b) => b.discount - a.discount);
+      case 'rating':     return items.sort((a, b) => b.rating - a.rating);
+      case 'discount':   return items.sort((a, b) => b.discount - a.discount);
       case 'bestseller': return items.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0));
-      default: return items.sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
+      default:           return items.sort((a, b) => (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0));
     }
-  }, [search, subcategory, selectedCategories, selectedGenders, priceMax, minRating, sort]);
+  }, [search, subcategory, selectedCats, selectedGenders, priceMax, minRating, sort]);
 
-  const toggleGender = (id: string) => setSelectedGenders(prev => prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]);
-  const toggleCategory = (id: string) => setSelectedCategories(prev => prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]);
-  const clearAll = () => { setSelectedGenders([]); setSelectedCategories([]); setPriceMax(50000); setMinRating(0); };
+  const toggleGender   = (id: string) => setSelectedGenders(prev => prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]);
+  const toggleCategory = (id: string) => setSelectedCats(prev => prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]);
+  const clearAll       = () => { setSelectedGenders([]); setSelectedCats([]); setPriceMax(50000); setMinRating(0); };
 
-  const title = search ? `Results for "${search}"` : subcategory ? decodeURIComponent(subcategory) : selectedCategories.length === 1 ? CATEGORIES.find(c => c.id === selectedCategories[0])?.name || 'All Products' : 'All Products';
+  const title = search ? `Results for "${search}"` : subcategory ? decodeURIComponent(subcategory) : selectedCats.length === 1 ? (CATEGORIES.find(c => c.id === selectedCats[0])?.name || 'All Products') : 'All Products';
+  const activeFilterCount = selectedGenders.length + selectedCats.length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ minHeight: '100vh', background: '#f4f4f4' }}>
+
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-pink-500 py-6 sm:py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h1 className="font-baloo text-2xl sm:text-3xl font-bold text-white">{title}</h1>
-          <p className="text-white/80 mt-1 text-sm">{filtered.length} products found</p>
+      <div style={{ background: 'linear-gradient(120deg,#FF6B00,#FF3D77)', padding: '28px 20px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <h1 className="font-baloo" style={{ fontSize: 'clamp(1.4rem,4vw,2rem)', fontWeight: 800, color: '#fff', marginBottom: 4 }}>{title}</h1>
+          <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13 }}>{filtered.length} products found</p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
-        {/* Mobile filter button & sort */}
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <button onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3 sm:px-4 py-2 text-sm font-semibold shadow-sm md:hidden">
-            <SlidersHorizontal size={16} /> Filters
-            {(selectedGenders.length + selectedCategories.length) > 0 && (
-              <span className="bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{selectedGenders.length + selectedCategories.length}</span>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '20px 20px 48px' }}>
+
+        {/* Controls bar */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
+          {/* Mobile filter button */}
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="md:hidden"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              background: '#fff', border: '1.5px solid #e5e5e5', borderRadius: 12,
+              padding: '9px 16px', fontSize: 13, fontWeight: 700, boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+            }}
+          >
+            <SlidersHorizontal size={15} /> Filters
+            {activeFilterCount > 0 && (
+              <span style={{ background: '#FF6B00', color: '#fff', fontSize: 11, width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900 }}>
+                {activeFilterCount}
+              </span>
             )}
           </button>
-          <div className="flex items-center gap-2 ml-auto">
-            <span className="text-sm text-gray-600 hidden sm:block">Sort:</span>
-            <select value={sort} onChange={e => setSort(e.target.value)} className="border border-gray-200 rounded-xl px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm bg-white shadow-sm focus:outline-none focus:border-orange-400">
+
+          {/* Sort */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginLeft: 'auto' }}>
+            <span style={{ fontSize: 13, color: '#666', fontWeight: 600 }} className="hidden sm:block">Sort:</span>
+            <select
+              value={sort} onChange={e => setSort(e.target.value)}
+              style={{ border: '1.5px solid #e5e5e5', borderRadius: 12, padding: '9px 14px', fontSize: 13, background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', outline: 'none', fontFamily: 'inherit', color: '#111' }}
+            >
               <option value="featured">Featured</option>
               <option value="bestseller">Bestsellers</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
+              <option value="price-asc">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
               <option value="rating">Top Rated</option>
               <option value="discount">Biggest Discount</option>
             </select>
           </div>
         </div>
 
-        <div className="flex gap-4 lg:gap-6">
-          {/* Sidebar Filters — desktop always visible, mobile slides over as overlay */}
-          <aside className={`${showFilters ? 'fixed inset-0 z-50 bg-white overflow-y-auto p-4' : 'hidden'} md:block md:static md:z-auto md:bg-transparent md:p-0 md:w-56 lg:w-64 flex-shrink-0`}>
-            {showFilters && (
-              <div className="flex items-center justify-between mb-4 md:hidden">
-                <h3 className="font-bold text-lg">Filters</h3>
-                <button onClick={() => setShowFilters(false)}><X /></button>
-              </div>
-            )}
+        <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
 
-            <div className="space-y-5">
-              {/* Clear */}
-              {(selectedGenders.length + selectedCategories.length) > 0 && (
-                <button onClick={clearAll} className="w-full text-sm text-orange-600 font-semibold border border-orange-200 rounded-xl py-2 hover:bg-orange-50">
-                  Clear All Filters
+          {/* ── Sidebar filters ── */}
+          {showFilters && (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 60, background: '#fff', overflowY: 'auto', padding: 20 }} className="md:hidden">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                <h3 style={{ fontWeight: 800, fontSize: 18, color: '#111' }}>Filters</h3>
+                <button onClick={() => setShowFilters(false)} style={{ background: '#f4f4f4', borderRadius: 10, width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <X size={18} />
                 </button>
-              )}
-
-              {/* Gender */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm">
-                <h4 className="font-bold text-gray-800 mb-3">Shop For</h4>
-                <div className="space-y-2">
-                  {GENDER_FILTERS.map(g => (
-                    <label key={g.id} className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 rounded-lg p-1.5">
-                      <input type="checkbox" checked={selectedGenders.includes(g.id)} onChange={() => toggleGender(g.id)} className="accent-orange-500 w-4 h-4" />
-                      <span className="text-lg">{g.icon}</span>
-                      <span className="text-sm font-medium text-gray-700">{g.label}</span>
-                    </label>
-                  ))}
-                </div>
               </div>
-
-              {/* Category */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm">
-                <h4 className="font-bold text-gray-800 mb-3">Category</h4>
-                <div className="space-y-2">
-                  {CATEGORIES.map(cat => (
-                    <label key={cat.id} className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 rounded-lg p-1.5">
-                      <input type="checkbox" checked={selectedCategories.includes(cat.id)} onChange={() => toggleCategory(cat.id)} className="accent-orange-500 w-4 h-4" />
-                      <span>{cat.icon}</span>
-                      <span className="text-sm font-medium text-gray-700">{cat.name}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm">
-                <h4 className="font-bold text-gray-800 mb-3">Max Price: ₹{priceMax.toLocaleString()}</h4>
-                <input type="range" min={100} max={50000} step={100} value={priceMax} onChange={e => setPriceMax(Number(e.target.value))} className="w-full accent-orange-500" />
-                <div className="flex justify-between text-xs text-gray-500 mt-1"><span>₹100</span><span>₹50,000</span></div>
-              </div>
-
-              {/* Rating */}
-              <div className="bg-white rounded-2xl p-4 shadow-sm">
-                <h4 className="font-bold text-gray-800 mb-3">Min Rating</h4>
-                {[4.5, 4, 3.5, 3].map(r => (
-                  <label key={r} className="flex items-center gap-2 cursor-pointer py-1">
-                    <input type="radio" name="rating" checked={minRating === r} onChange={() => setMinRating(r)} className="accent-orange-500" />
-                    <span className="text-sm">{'⭐'.repeat(Math.floor(r))} {r}+</span>
-                  </label>
-                ))}
-              </div>
+              <FilterPanel {...{ selectedGenders, selectedCats, priceMax, minRating, toggleGender, toggleCategory, setPriceMax, setMinRating, clearAll, activeFilterCount, onApply: () => setShowFilters(false) }} />
             </div>
+          )}
+
+          <aside style={{ width: 240, flexShrink: 0 }} className="hidden md:block">
+            <FilterPanel {...{ selectedGenders, selectedCats, priceMax, minRating, toggleGender, toggleCategory, setPriceMax, setMinRating, clearAll, activeFilterCount }} />
           </aside>
 
-          {/* Products Grid */}
-          <div className="flex-1 min-w-0">
+          {/* ── Products grid ── */}
+          <div style={{ flex: 1, minWidth: 0 }}>
             {filtered.length === 0 ? (
-              <div className="text-center py-16 sm:py-20">
-                <div className="text-5xl sm:text-6xl mb-4">🧸</div>
-                <h3 className="font-baloo text-xl sm:text-2xl font-bold text-gray-600">No products found</h3>
-                <p className="text-gray-400 mt-2 text-sm">Try adjusting your filters</p>
-                <button onClick={clearAll} className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-full font-bold hover:bg-orange-600 text-sm">Clear Filters</button>
+              <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+                <div style={{ fontSize: 56, marginBottom: 16 }}>🧸</div>
+                <h3 className="font-baloo" style={{ fontSize: 22, fontWeight: 800, color: '#555', marginBottom: 8 }}>No products found</h3>
+                <p style={{ color: '#aaa', fontSize: 14, marginBottom: 20 }}>Try adjusting your filters</p>
+                <button onClick={clearAll} className="btn btn-primary btn-sm">Clear Filters</button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 14 }} className="plp-grid">
                 {filtered.map(p => <ProductCard key={p.id} product={p} />)}
               </div>
             )}
           </div>
         </div>
       </div>
+
+    </div>
+  );
+}
+
+function FilterPanel({
+  selectedGenders, selectedCats, priceMax, minRating,
+  toggleGender, toggleCategory, setPriceMax, setMinRating,
+  clearAll, activeFilterCount, onApply,
+}: {
+  selectedGenders: string[]; selectedCats: string[]; priceMax: number; minRating: number;
+  toggleGender: (id: string) => void; toggleCategory: (id: string) => void;
+  setPriceMax: (v: number) => void; setMinRating: (v: number) => void;
+  clearAll: () => void; activeFilterCount: number; onApply?: () => void;
+}) {
+  const block = { background: '#fff', borderRadius: 18, padding: '18px 18px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)', marginBottom: 14 };
+  const heading = { fontWeight: 800, fontSize: 14, color: '#111', marginBottom: 14 };
+
+  return (
+    <div>
+      {activeFilterCount > 0 && (
+        <button onClick={clearAll} style={{
+          width: '100%', marginBottom: 14, padding: '10px', borderRadius: 12,
+          fontSize: 13, fontWeight: 700, color: '#FF6B00',
+          border: '1.5px solid #ffcba4', background: '#fff7ed',
+        }}>
+          ✕ Clear All Filters ({activeFilterCount})
+        </button>
+      )}
+
+      <div style={block}>
+        <h4 style={heading}>Shop For</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {GENDER_FILTERS.map(g => (
+            <label key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', padding: '7px 8px', borderRadius: 10, transition: 'background 0.12s' }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#fff3ea')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
+            >
+              <input type="checkbox" checked={selectedGenders.includes(g.id)} onChange={() => toggleGender(g.id)} style={{ accentColor: '#FF6B00', width: 16, height: 16, cursor: 'pointer', flexShrink: 0 }} />
+              <span style={{ fontSize: 16 }}>{g.icon}</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#333' }}>{g.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div style={block}>
+        <h4 style={heading}>Category</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 300, overflowY: 'auto' }}>
+          {CATEGORIES.map(cat => (
+            <label key={cat.id} style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', padding: '7px 8px', borderRadius: 10, transition: 'background 0.12s' }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#fff3ea')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
+            >
+              <input type="checkbox" checked={selectedCats.includes(cat.id)} onChange={() => toggleCategory(cat.id)} style={{ accentColor: '#FF6B00', width: 16, height: 16, cursor: 'pointer', flexShrink: 0 }} />
+              <span>{cat.icon}</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#333' }}>{cat.name}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div style={block}>
+        <h4 style={heading}>Max Price: ₹{priceMax.toLocaleString()}</h4>
+        <input type="range" min={100} max={50000} step={100} value={priceMax} onChange={e => setPriceMax(Number(e.target.value))} style={{ width: '100%', accentColor: '#FF6B00' }} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#aaa', marginTop: 6 }}>
+          <span>₹100</span><span>₹50,000</span>
+        </div>
+      </div>
+
+      <div style={block}>
+        <h4 style={heading}>Min Rating</h4>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {[4.5, 4, 3.5, 3].map(r => (
+            <label key={r} style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', fontSize: 13, color: '#333' }}>
+              <input type="radio" name="rating" checked={minRating === r} onChange={() => setMinRating(r)} style={{ accentColor: '#FF6B00' }} />
+              {'⭐'.repeat(Math.floor(r))} {r}+
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {onApply && (
+        <button onClick={onApply} className="btn btn-primary" style={{ width: '100%', borderRadius: 14 }}>
+          Apply Filters
+        </button>
+      )}
     </div>
   );
 }
 
 export default function ProductsPage() {
-  return (
-    <Suspense>
-      <ProductsContent />
-    </Suspense>
-  );
+  return <Suspense><ProductsContent /></Suspense>;
 }

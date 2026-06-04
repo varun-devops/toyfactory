@@ -8,7 +8,8 @@ import toast from 'react-hot-toast';
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart, toggleFavorite, favorites } = useStore();
-  const isFav = favorites.includes(product.id);
+  const isFav  = favorites.includes(product.id);
+  const is18   = product.ageRating === '18+';
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -22,115 +23,148 @@ export default function ProductCard({ product }: { product: Product }) {
     toast(isFav ? 'Removed from wishlist' : 'Saved to wishlist ❤️');
   };
 
-  const is18 = product.ageRating === '18+';
-
   return (
-    <Link href={`/products/${product.id}`} className="block">
-      <div className="product-card group cursor-pointer bg-white">
+    <Link href={`/products/${product.id}`} style={{ display: 'block', textDecoration: 'none' }}>
+      <div className="product-card" style={{ height: '100%' }}>
 
         {/* ── Image ── */}
-        <div className="relative overflow-hidden bg-[#f7f4f0]" style={{ aspectRatio: '1 / 1' }}>
+        <div style={{ position: 'relative', aspectRatio: '1/1', overflow: 'hidden', background: '#f7f4f0' }}>
           <Image
             src={product.images[0]}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover"
+            style={{ transition: 'transform 0.45s ease' }}
             sizes="(max-width:640px) 50vw,(max-width:1024px) 33vw,25vw"
           />
 
-          {/* Gradient overlay on hover */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            style={{ background: 'linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.4) 100%)' }} />
+          {/* Hover overlay */}
+          <div className="img-hover-overlay" style={{
+            position: 'absolute', inset: 0, opacity: 0,
+            background: 'linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.38) 100%)',
+            transition: 'opacity 0.3s',
+          }} />
 
           {/* Top-left badge */}
           {product.badge && !is18 && (
-            <span className="absolute top-2 left-2 text-white text-[9px] sm:text-[10px] font-black tracking-wide px-2 py-0.5 rounded-full"
-              style={{ background: 'linear-gradient(120deg,#FF6B00,#FF3D77)', boxShadow: '0 2px 8px rgba(255,107,0,0.4)' }}>
+            <span style={{
+              position: 'absolute', top: 8, left: 8,
+              background: 'linear-gradient(120deg,#FF6B00,#FF3D77)',
+              color: '#fff', fontSize: 10, fontWeight: 900,
+              padding: '3px 9px', borderRadius: 99,
+              boxShadow: '0 2px 8px rgba(255,107,0,0.4)',
+            }}>
               {product.badge}
             </span>
           )}
 
-          {/* 18+ badge */}
           {is18 && (
-            <span className="absolute top-2 left-2 text-white text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-full"
-              style={{ background: '#111', letterSpacing: '0.05em' }}>
+            <span style={{
+              position: 'absolute', top: 8, left: 8,
+              background: '#111', color: '#fff', fontSize: 10,
+              fontWeight: 900, padding: '3px 9px', borderRadius: 99,
+            }}>
               🔞 18+
             </span>
           )}
 
-          {/* Discount */}
-          <span className="absolute top-2 right-9 sm:right-10 text-white text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full"
-            style={{ background: '#16a34a' }}>
+          {/* Discount top-right (leave room for heart) */}
+          <span style={{
+            position: 'absolute', top: 8, right: 44,
+            background: '#16a34a', color: '#fff', fontSize: 10,
+            fontWeight: 900, padding: '3px 8px', borderRadius: 99,
+          }}>
             {product.discount}% OFF
           </span>
 
           {/* Heart */}
           <button
             onClick={handleFav}
-            className="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full transition-all duration-200"
             style={{
-              background: isFav ? '#FF3D77' : 'rgba(255,255,255,0.92)',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
-              transform: isFav ? 'scale(1.1)' : 'scale(1)',
+              position: 'absolute', top: 8, right: 8,
+              width: 32, height: 32, borderRadius: '50%',
+              background: isFav ? '#FF3D77' : 'rgba(255,255,255,0.95)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.14)',
+              transition: 'transform 0.2s, background 0.2s',
+              transform: isFav ? 'scale(1.12)' : 'scale(1)',
             }}
+            aria-label="Toggle wishlist"
           >
-            <Heart size={12} className={isFav ? 'fill-white text-white' : 'text-gray-500'} />
+            <Heart size={13} style={{ color: isFav ? '#fff' : '#777', fill: isFav ? '#fff' : 'none' }} />
           </button>
 
-          {/* Quick add on hover */}
+          {/* Quick add — shows on hover */}
           <button
             onClick={handleAdd}
-            className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 text-white text-[10px] sm:text-xs font-bold py-1.5 sm:py-2 rounded-xl flex items-center justify-center gap-1"
-            style={{ background: 'linear-gradient(120deg,#FF6B00,#FF3D77)', backdropFilter: 'blur(4px)' }}
+            className="quick-add-btn"
+            style={{
+              position: 'absolute', bottom: 10, left: 10, right: 10,
+              background: 'linear-gradient(120deg,#FF6B00,#FF3D77)',
+              color: '#fff', fontSize: 11, fontWeight: 800,
+              padding: '8px 12px', borderRadius: 12,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+              opacity: 0, transform: 'translateY(6px)',
+              transition: 'opacity 0.25s, transform 0.25s',
+            }}
           >
-            <ShoppingCart size={11} /> Quick Add
+            <ShoppingCart size={12} /> Quick Add
           </button>
         </div>
 
         {/* ── Info ── */}
-        <div className="p-2 sm:p-3">
+        <div className="product-card__body">
           {/* Brand */}
-          <p className="text-[9px] sm:text-[10px] font-black tracking-widest uppercase mb-0.5 sm:mb-1 truncate"
-            style={{ color: '#FF6B00' }}>
+          <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#FF6B00' }}>
             {product.brand}
           </p>
 
           {/* Name */}
-          <h3 className="text-xs sm:text-sm font-bold leading-snug line-clamp-2 mb-1.5 sm:mb-2" style={{ color: '#111', letterSpacing: '-0.01em' }}>
+          <h3 className="line-clamp-2" style={{ fontSize: 13, fontWeight: 700, color: '#111', lineHeight: 1.4, letterSpacing: '-0.01em' }}>
             {product.name}
           </h3>
 
-          {/* Rating */}
-          <div className="flex items-center gap-1 mb-1.5 sm:mb-2.5">
-            <div className="flex">
-              {[1, 2, 3, 4, 5].map(s => (
-                <Star key={s} size={9}
-                  className={s <= Math.round(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'} />
+          {/* Stars */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <div style={{ display: 'flex', gap: 1 }}>
+              {[1,2,3,4,5].map(s => (
+                <Star key={s} size={10} style={{ fill: s <= Math.round(product.rating) ? '#f59e0b' : '#e5e7eb', color: s <= Math.round(product.rating) ? '#f59e0b' : '#e5e7eb' }} />
               ))}
             </div>
-            <span style={{ fontSize: 9, color: '#888' }}>({(product.reviewCount / 1000).toFixed(0)}K)</span>
+            <span style={{ fontSize: 10, color: '#999' }}>({(product.reviewCount / 1000).toFixed(0)}K)</span>
           </div>
 
           {/* Price row */}
-          <div className="flex items-center justify-between gap-1">
-            <div className="flex items-baseline gap-1 min-w-0">
-              <span className="text-sm sm:text-base font-black truncate" style={{ color: '#111', letterSpacing: '-0.02em' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4, marginTop: 2 }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, minWidth: 0 }}>
+              <span style={{ fontSize: 15, fontWeight: 900, color: '#111', letterSpacing: '-0.02em' }}>
                 ₹{product.price.toLocaleString()}
               </span>
-              <span className="text-[10px] sm:text-xs line-through flex-shrink-0" style={{ color: '#bbb' }}>
+              <span style={{ fontSize: 11, color: '#ccc', textDecoration: 'line-through', flexShrink: 0 }}>
                 ₹{product.mrp.toLocaleString()}
               </span>
             </div>
             <button
               onClick={handleAdd}
-              className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0 flex items-center justify-center rounded-full transition-transform active:scale-90"
-              style={{ background: 'linear-gradient(120deg,#FF6B00,#FF3D77)', boxShadow: '0 4px 14px rgba(255,107,0,0.35)' }}
+              style={{
+                width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
+                background: 'linear-gradient(120deg,#FF6B00,#FF3D77)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 4px 12px rgba(255,107,0,0.32)',
+                transition: 'transform 0.15s',
+              }}
+              aria-label="Add to cart"
             >
-              <ShoppingCart size={13} className="text-white" />
+              <ShoppingCart size={13} style={{ color: '#fff' }} />
             </button>
           </div>
         </div>
       </div>
+
+      <style>{`
+        .product-card:hover .img-hover-overlay { opacity: 1 !important; }
+        .product-card:hover .quick-add-btn     { opacity: 1 !important; transform: translateY(0) !important; }
+      `}</style>
     </Link>
   );
 }
